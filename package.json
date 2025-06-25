@@ -1,5 +1,5 @@
 {
-  "name": "minicli",
+  "name": "ucli",
   "version": "0.1.0",
   "description": "Mini command-line tool similar to `yargs` or `parseArgs` from Node.js that accepts positional arguments, flags and options.",
   "type": "module",
@@ -21,13 +21,13 @@
   ],
   "license": "MIT",
   "author": "Ghislain B.",
-  "homepage": "https://github.com/ghiscoding/minicli",
+  "homepage": "https://github.com/ghiscoding/ucli",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ghiscoding/minicli.git"
+    "url": "git+https://github.com/ghiscoding/ucli.git"
   },
   "bugs": {
-    "url": "https://github.com/ghiscoding/minicli/issues"
+    "url": "https://github.com/ghiscoding/ucli/issues"
   },
   "scripts": {
     "clean": "premove dist",
