@@ -1,12 +1,12 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 [![Vitest](https://img.shields.io/badge/tested%20with-vitest-fcc72b.svg?logo=vitest)](https://vitest.dev/)
-[![codecov](https://codecov.io/gh/ghiscoding/microcli/branch/main/graph/badge.svg)](https://codecov.io/gh/ghiscoding/microcli)
-[![npm](https://img.shields.io/npm/v/microcli.svg)](https://www.npmjs.com/package/microcli)
-[![npm](https://img.shields.io/npm/dy/microcli)](https://www.npmjs.com/package/microcli)
-[![npm bundle size](https://img.shields.io/bundlephobia/minzip/microcli?color=success&label=gzip)](https://bundlephobia.com/result?p=microcli)
+[![codecov](https://codecov.io/gh/ghiscoding/minicli/branch/main/graph/badge.svg)](https://codecov.io/gh/ghiscoding/minicli)
+[![npm](https://img.shields.io/npm/v/minicli.svg)](https://www.npmjs.com/package/minicli)
+[![npm](https://img.shields.io/npm/dy/minicli)](https://www.npmjs.com/package/minicli)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/minicli?color=success&label=gzip)](https://bundlephobia.com/result?p=minicli)
 
-## microcli
+## minicli
 
 Super small custom CLI similar to `Yargs` but much smaller, it uses a similar approach to NodeJS `parseArgs()` to create command-line tool (aka CLI). It is much more complete than NodeJS `parseArgs()` since it supports Positional Arguments, negated flags and also accepts both syntax `--camelCase` and/or `--kebab-case`.
 
@@ -20,7 +20,7 @@ Super small custom CLI similar to `Yargs` but much smaller, it uses a similar ap
 
 ### Install
 ```sh
-npm install microcli
+npm install minicli
 ```
 
 ### Usage
@@ -28,7 +28,7 @@ npm install microcli
 ```ts
 #!/usr/bin/env node
 
-import { type Config, parseArgs } from 'microcli';
+import { type Config, parseArgs } from 'minicli';
 
 const config: Config = {
   command: {

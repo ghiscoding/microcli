@@ -1,5 +1,5 @@
 {
-  "name": "microcli",
+  "name": "minicli",
   "version": "0.1.0",
   "description": "Mini command-line tool similar to `yargs` or `parseArgs` from Node.js that accepts positional arguments, flags and options.",
   "type": "module",
@@ -21,13 +21,13 @@
   ],
   "license": "MIT",
   "author": "Ghislain B.",
-  "homepage": "https://github.com/ghiscoding/microcli",
+  "homepage": "https://github.com/ghiscoding/minicli",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ghiscoding/microcli.git"
+    "url": "git+https://github.com/ghiscoding/minicli.git"
   },
   "bugs": {
-    "url": "https://github.com/ghiscoding/microcli/issues"
+    "url": "https://github.com/ghiscoding/minicli/issues"
   },
   "scripts": {
     "clean": "premove dist",
