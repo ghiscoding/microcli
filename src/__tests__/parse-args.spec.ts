@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { parseArgs } from './index.js';
-import type { Config } from './interfaces.js';
+import type { Config } from '../interfaces.js';
 
 const config: Config = {
   command: {
