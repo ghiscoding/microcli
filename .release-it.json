@@ -8,8 +8,7 @@
         "releaseName": "v${version}"
     },
     "npm": {
-        "publish": true,
-        "publishPath": "dist/"
+        "publish": true
     },
     "hooks": {
         "after:bump": "npm run build",
