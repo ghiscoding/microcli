@@ -21,14 +21,13 @@
   ],
   "license": "MIT",
   "author": "Ghislain B.",
-  "homepage": "https://github.com/ghiscoding/gc-utils",
+  "homepage": "https://github.com/ghiscoding/micro-cli",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ghiscoding/gc-utils.git",
-    "directory": "packages/release"
+    "url": "git+https://github.com/ghiscoding/micro-cli.git"
   },
   "bugs": {
-    "url": "https://github.com/ghiscoding/gc-utils/issues"
+    "url": "https://github.com/ghiscoding/micro-cli/issues"
   },
   "scripts": {
     "clean": "premove dist",
