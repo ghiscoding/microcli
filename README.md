@@ -1,6 +1,14 @@
-# `@gc-utils/parse-args`
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
+[![Vitest](https://img.shields.io/badge/tested%20with-vitest-fcc72b.svg?logo=vitest)](https://vitest.dev/)
+[![codecov](https://codecov.io/gh/ghiscoding/micro-cli/branch/main/graph/badge.svg)](https://codecov.io/gh/ghiscoding/micro-cli)
+[![npm](https://img.shields.io/npm/v/micro-cli.svg)](https://www.npmjs.com/package/micro-cli)
+[![npm](https://img.shields.io/npm/dy/micro-cli)](https://www.npmjs.com/package/micro-cli)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/micro-cli?color=success&label=gzip)](https://bundlephobia.com/result?p=micro-cli)
 
-Super small custom `parseArgs()` to create command-line tool (aka CLI)
+## micro-cli
+
+Super small custom CLI similar to `Yargs` but much smaller, it uses a similar approach to NodeJS `parseArgs()` to create command-line tool (aka CLI). It is much more complete than NodeJS `parseArgs()` since it supports Positional Arguments, negated flags and also accepts both syntax `--camelCase` and/or `--kebab-case`.
 
 ### Features
 - Parses arguments
@@ -12,7 +20,7 @@ Super small custom `parseArgs()` to create command-line tool (aka CLI)
 
 ### Install
 ```sh
-npm install @gc-utils/parse-args
+npm install micro-cli
 ```
 
 ### Usage
