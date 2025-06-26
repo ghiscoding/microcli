@@ -108,8 +108,7 @@ export function parseArgs(config: Config): Record<string, any> {
           // Try matching aliases in all forms
           for (const key of Object.keys(options)) {
             const opt = options[key];
-            if (!opt.alias) continue;
-            if (opt.alias.includes(arg) || opt.alias.includes(kebabToCamel(arg)) || opt.alias.includes(camelToKebab(arg))) {
+            if (opt.alias && (opt.alias.includes(arg) || opt.alias.includes(kebabToCamel(arg)) || opt.alias.includes(camelToKebab(arg)))) {
               option = opt;
               configKey = key;
               break;
@@ -123,8 +122,7 @@ export function parseArgs(config: Config): Record<string, any> {
           const optionKeys = Object.keys(options);
           for (let j = 0; j < optionKeys.length; j++) {
             const opt = options[optionKeys[j]];
-            if (!opt.alias) continue;
-            if (opt.alias === arg || opt.alias === kebabToCamel(arg) || opt.alias === camelToKebab(arg)) {
+            if (opt.alias && (opt.alias === arg || opt.alias === kebabToCamel(arg) || opt.alias === camelToKebab(arg))) {
               option = opt;
               configKey = optionKeys[j];
               break;
@@ -154,18 +152,12 @@ export function parseArgs(config: Config): Record<string, any> {
         throw new Error(`Unknown option: ${arg}`);
       }
 
-      switch (option.type || 'string') {
+      switch (option.type) {
         case 'boolean':
           if (result[configKey] !== undefined) {
             throw new Error('Providing same negated and truthy argument are not allowed');
           }
           result[configKey] = !argOrg.startsWith('--no-') && !argOrg.startsWith('-no-');
-          break;
-        case 'string':
-          if (args[argIndex + 1] === undefined || args[argIndex + 1].startsWith('-')) {
-            throw new Error(`Missing value for option: ${configKey}`);
-          }
-          result[configKey] = args[++argIndex];
           break;
         case 'number':
           if (args[argIndex + 1] === undefined || args[argIndex + 1].startsWith('-')) {
@@ -182,6 +174,13 @@ export function parseArgs(config: Config): Record<string, any> {
           result[configKey].push(arrayValue);
           break;
         }
+        case 'string':
+        default:
+          if (args[argIndex + 1] === undefined || args[argIndex + 1].startsWith('-')) {
+            throw new Error(`Missing value for option: ${configKey}`);
+          }
+          result[configKey] = args[++argIndex];
+          break;
       }
     } else {
       throw new Error(`Unknown argument: ${arg}`);
@@ -189,7 +188,7 @@ export function parseArgs(config: Config): Record<string, any> {
     argIndex++;
   }
 
-  // After all parsing, check for required options
+  // After all parsing, check for any missing required options
   Object.entries(options).forEach(([key, opt]) => {
     if (opt.required && result[key] === undefined) {
       const aliasStr = opt.alias ? `-${opt.alias}, ` : '';
@@ -200,6 +199,7 @@ export function parseArgs(config: Config): Record<string, any> {
   return result;
 }
 
+/** print CLI help documentation to the screen */
 function printHelp(config: Config) {
   const { command, options } = config;
 
@@ -219,6 +219,8 @@ function printHelp(config: Config) {
   command.positional?.forEach(arg => {
     console.log(`  ${arg.name.padEnd(20)}${arg.description.slice(0, 65).padEnd(65)}[${arg.type || 'string'}]`);
   });
+
+  // Build usage string for options
   console.log('\nOptions:');
   Object.keys(options).forEach(key => {
     const option = options[key];
@@ -228,6 +230,8 @@ function printHelp(config: Config) {
       `  ${aliasStr.padEnd(4)}--${key.padEnd(14)}${(option.description || '').slice(0, 65).padEnd(65)}[${option.type || 'string'}]${requiredStr}`,
     );
   });
+
+  // Print default options (help and version)
   console.log('\nDefault options:');
   console.log(`${padString('  -h, --help', 21)} ${padString('Show help', 64)} [boolean]`);
   console.log(`${padString('  -v, --version', 21)} ${padString('Show version number', 64)} [boolean]`);
