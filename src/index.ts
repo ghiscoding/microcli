@@ -1,6 +1,8 @@
 import type { ArgumentOptions, Config } from './interfaces.js';
 import { camelToKebab, kebabToCamel, padString } from './utils.js';
 
+export type * from './interfaces.js';
+
 export function parseArgs(config: Config): Record<string, any> {
   const { command, options, version } = config;
   const args = process.argv.slice(2);
