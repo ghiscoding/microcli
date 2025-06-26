@@ -3,6 +3,7 @@
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
 import { parseArgs } from '../dist/index.js';
 import type { Config } from '../dist/interfaces.js';
 
