@@ -34,7 +34,9 @@ export function parseArgs(config: Config): Record<string, any> {
   const positionals = command.positional ?? [];
   let foundOptional = false;
   for (const pos of positionals) {
-    if (!pos.required) foundOptional = true;
+    if (!pos.required) {
+      foundOptional = true;
+    }
     if (foundOptional && pos.required) {
       throw new Error(`Invalid positional argument configuration: required positional "${pos.name}" cannot follow optional positional(s).`);
     }
