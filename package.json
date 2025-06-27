@@ -1,6 +1,6 @@
 {
   "name": "cli-nano",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Mini command-line tool similar to `yargs` or `parseArgs` from Node.js that accepts positional arguments, flags and options.",
   "type": "module",
   "main": "./dist/index.js",
