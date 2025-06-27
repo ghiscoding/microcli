@@ -1,6 +1,17 @@
 # Change Log
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.0](https://github.com/ghiscoding/cli-nano/compare/v0.2.1...v0.3.0) (2025-06-27)
+
+### Features
+
+* add `default` value for both `positionals` and regular `options` ([481482c](https://github.com/ghiscoding/cli-nano/commit/481482cb0e264f7cf8f0de55f22588f53c4fb1aa))
+
+### Bug Fixes
+
+* show `version` in Help guide but only when defined ([a6891b9](https://github.com/ghiscoding/cli-nano/commit/a6891b9f36cf01904bb20b6a72609d74bd864da1))
+* validate: required positionals must come before optional ones ([767e09c](https://github.com/ghiscoding/cli-nano/commit/767e09c918948f34a3a576273239a114606a576e))
+
 ## [0.2.1](https://github.com/ghiscoding/cli-nano/compare/v0.2.0...v0.2.1) (2025-06-26)
 
 ### Bug Fixes
