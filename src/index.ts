@@ -25,8 +25,8 @@ export function parseArgs(config: Config): Record<string, any> {
     printHelp(config);
     process.exit(0);
   }
-  if (args.includes('--version') || args.includes('-v')) {
-    console.log(version);
+  if ((version && args.includes('--version')) || args.includes('-v')) {
+    console.log(version || 'No version specified');
     process.exit(0);
   }
 
@@ -214,7 +214,7 @@ export function parseArgs(config: Config): Record<string, any> {
 
 /** print CLI help documentation to the screen */
 function printHelp(config: Config) {
-  const { command, options } = config;
+  const { command, options, version } = config;
 
   // Build usage string for positionals
   const usagePositionals = (command.positional ?? [])
@@ -247,6 +247,8 @@ function printHelp(config: Config) {
   // Print default options (help and version)
   console.log('\nDefault options:');
   console.log(`${padString('  -h, --help', 21)} ${padString('Show help', 64)} [boolean]`);
-  console.log(`${padString('  -v, --version', 21)} ${padString('Show version number', 64)} [boolean]`);
+  if (version) {
+    console.log(`${padString('  -v, --version', 21)} ${padString('Show version number', 64)} [boolean]`);
+  }
   console.log('\n');
 }

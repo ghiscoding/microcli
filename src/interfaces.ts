@@ -36,5 +36,5 @@ export interface CommandOptions {
 export interface Config {
   command: CommandOptions;
   options: Record<string, ArgumentOptions>;
-  version: string;
+  version?: string;
 }
