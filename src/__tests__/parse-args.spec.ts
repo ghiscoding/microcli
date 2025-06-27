@@ -259,16 +259,16 @@ describe('parseArgs', () => {
         description: 'Test optional variadic',
         positional: [
           {
+            name: 'outDir',
+            description: 'output directory',
+            required: true,
+          },
+          {
             name: 'inputs',
             description: 'input files',
             type: 'string',
             variadic: true,
             required: false,
-          },
-          {
-            name: 'outDir',
-            description: 'output directory',
-            required: true,
           },
         ],
       },
@@ -279,15 +279,14 @@ describe('parseArgs', () => {
     let args = ['dist'];
     vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
     let result = parseArgs(config);
-    expect(result.inputs).toEqual([]);
     expect(result.outDir).toBe('dist');
-
+    expect(result.inputs).toEqual([]);
     // Multiple inputs
-    args = ['file1', 'file2', 'dist'];
+    args = ['dist', 'file1', 'file2'];
     vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
     result = parseArgs(config);
-    expect(result.inputs).toEqual(['file1', 'file2']);
     expect(result.outDir).toBe('dist');
+    expect(result.inputs).toEqual(['file1', 'file2']);
   });
 
   it('should parse a single optional variadic positional arguments (zero or more)', () => {
@@ -507,16 +506,16 @@ describe('parseArgs', () => {
         description: 'Test default positional',
         positional: [
           {
+            name: 'outDir',
+            description: 'output directory',
+            required: true,
+          },
+          {
             name: 'input',
             description: 'input file',
             type: 'string',
             required: false,
             default: 'default.txt',
-          },
-          {
-            name: 'outDir',
-            description: 'output directory',
-            required: true,
           },
         ],
       },
@@ -526,8 +525,26 @@ describe('parseArgs', () => {
     const args = ['dist'];
     vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
     const result = parseArgs(configWithDefaultPositional);
-    expect(result.input).toBe('default.txt');
     expect(result.outDir).toBe('dist');
+    expect(result.input).toBe('default.txt');
+  });
+
+  it('should throw if required positional comes after optional positional', () => {
+    const configInvalid: Config = {
+      command: {
+        name: 'badcli',
+        description: 'Invalid CLI',
+        positional: [
+          { name: 'foo', description: '', required: false },
+          { name: 'bar', description: '', required: true },
+        ],
+      },
+      options: {},
+      version: '1.0.0',
+    };
+    expect(() => parseArgs(configInvalid)).toThrow(
+      'Invalid positional argument configuration: required positional "bar" cannot follow optional positional(s).',
+    );
   });
 
   it('should use default value for optional variadic positional argument when not provided', () => {
@@ -537,17 +554,17 @@ describe('parseArgs', () => {
         description: 'Test default variadic positional',
         positional: [
           {
+            name: 'outDir',
+            description: 'output directory',
+            required: true,
+          },
+          {
             name: 'inputs',
             description: 'input files',
             type: 'string',
             variadic: true,
             required: false,
             default: ['default1.txt', 'default2.txt'],
-          },
-          {
-            name: 'outDir',
-            description: 'output directory',
-            required: true,
           },
         ],
       },
@@ -557,8 +574,8 @@ describe('parseArgs', () => {
     const args = ['dist'];
     vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
     const result = parseArgs(configWithDefaultVariadic);
-    expect(result.inputs).toEqual(['default1.txt', 'default2.txt']);
     expect(result.outDir).toBe('dist');
+    expect(result.inputs).toEqual(['default1.txt', 'default2.txt']);
   });
 
   it('should not use default value for option if value is provided', () => {
