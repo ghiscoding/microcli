@@ -16,6 +16,8 @@ Super small custom CLI similar to `Yargs` but much smaller, it uses a similar ap
 - Negates flags when using the `--no-` prefix
 - Outputs version when `--version`
 - Outputs description and supplied help text when `--help`
+- Supports defining `required` options
+- Supports `default` values
 - No dependencies!
 
 ### Install
@@ -32,15 +34,15 @@ import { type Config, parseArgs } from 'cli-nano';
 
 const config: Config = {
   command: {
-    name: 'unicorns',
-    description: 'Show a list of unicorns',
+    name: 'serve',
+    description: 'Start a server with the given options',
     positional: [
       {
-        name: 'inputs',
-        description: 'unicorn inputs',
-        type: 'string',
-        variadic: true, // one or more inputs could be provided
-        required: true,
+        name: 'port',
+        type: 'number',
+        description: 'port to bind on',
+        required: false,
+        default: 5000, // optional default value for positional
       },
       {
         name: 'output',
@@ -54,7 +56,8 @@ const config: Config = {
     dryRun: {
       alias: 'd',
       type: 'boolean',
-      description: 'Show what would be copied, but do not actually copy any files',
+      description: 'Show what would be done, but do not actually start the server',
+      default: false, // optional default value
     },
     exclude: {
       alias: 'e',
@@ -65,6 +68,7 @@ const config: Config = {
       type: 'boolean',
       alias: 'r',
       description: 'Enable rainbow mode',
+      default: true,
     },
     verbose: {
       alias: 'V',
@@ -74,6 +78,7 @@ const config: Config = {
     up: {
       type: 'number',
       description: 'slice a path off the bottom of the paths',
+      default: 1,
     },
     bar: {
       alias: 'b',
@@ -84,37 +89,46 @@ const config: Config = {
   version: '0.1.6',
 };
 
-const argv = parseArgs(config);
-console.log(argv);
+const args = parseArgs(config);
+console.log(args);
+
+// do something with parse arguments, for example
+// startServer(args);
 ```
 
 #### Example CLI Calls
 
 ```sh
 # Show help
-unicorns --help
+serve --help
 
 # Show version
-unicorns --version
+serve --version
+
+# Uses default port 5000
+serve output/
 
 # With required and optional positionals
-unicorns file1.txt file2.txt output/ -b value
+serve file1.html file2.html output/ -b value
 
 # With boolean and array options
-unicorns file1.txt output/ --dryRun --exclude pattern1 --exclude pattern2 -b value
+serve file1.html output/ --dryRun --exclude pattern1 --exclude pattern2 -b value
 
 # With negated boolean
-unicorns file1.txt output/ --no-dryRun -b value
+serve file1.html output/ --no-dryRun -b value
 
 # With short aliases
-unicorns file1.txt output/ -d -e pattern1 -e pattern2 -b value
+serve file1.html output/ -d -e pattern1 -e pattern2 -b value
 
 # With number option
-unicorns file1.txt output/ --up 2 -b value
+serve file1.html output/ --up 2 -b value
 ```
 
 #### Notes
 
+- **Default values**: Use the `default` property in an option or positional argument to specify a value if the user does not provide one.
+  - Example for option: `{ type: 'boolean', default: false }`
+  - Example for positional: `{ name: 'port', type: 'number', default: 5000 }`
 - **Variadic positionals**: Use `variadic: true` for arguments that accept multiple values.
 - **Required options**: Add `required: true` to enforce presence of an option.
 - **Negated booleans**: Use `--no-flag` to set a boolean option to `false`.
