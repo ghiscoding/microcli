@@ -38,8 +38,8 @@ export function parseArgs(config: Config): Record<string, any> {
     nonOptionArgs.push(args[argIndex]);
     argIndex++;
   }
-  let nonOptionIndex = 0;
 
+  let nonOptionIndex = 0;
   for (let i = 0; i < positionals.length; i++) {
     const pos = positionals[i];
     if (pos.variadic) {
@@ -49,15 +49,22 @@ export function parseArgs(config: Config): Record<string, any> {
         const usagePositionals = positionals.map(posArg => `<${posArg.name}>`).join(' ');
         throw new Error(`Missing required positional argument, i.e.: "${command.name} ${usagePositionals}"`);
       }
-      result[pos.name] = values;
+      result[pos.name] = !pos.required && values.length === 0 && pos.default !== undefined ? pos.default : values;
       nonOptionIndex += values.length;
     } else {
-      const value = nonOptionArgs[nonOptionIndex++];
-      if (!value) {
+      const value = nonOptionArgs[nonOptionIndex];
+      // Check if there are enough args left for required positionals
+      const requiredLeft = positionals.slice(i).filter(p => p.required).length;
+      const argsLeft = nonOptionArgs.length - nonOptionIndex;
+      if (value !== undefined && (argsLeft > requiredLeft - (pos.required ? 1 : 0) || pos.required)) {
+        result[pos.name] = value;
+        nonOptionIndex++;
+      } else if (!pos.required && pos.default !== undefined) {
+        result[pos.name] = pos.default;
+      } else if (pos.required) {
         const usagePositionals = positionals.map(posArg => `<${posArg.name}>`).join(' ');
         throw new Error(`Missing required positional argument, i.e.: "${command.name} ${usagePositionals}"`);
       }
-      result[pos.name] = value;
     }
   }
 
@@ -190,8 +197,12 @@ export function parseArgs(config: Config): Record<string, any> {
     argIndex++;
   }
 
-  // After all parsing, check for any missing required options
+  // After all parsing, assign any `default` CLI options when undefined
+  // and check for any missing `required` CLI options
   Object.entries(options).forEach(([key, opt]) => {
+    if (result[key] === undefined && opt.default !== undefined) {
+      result[key] = opt.default;
+    }
     if (opt.required && result[key] === undefined) {
       const aliasStr = opt.alias ? `-${opt.alias}, ` : '';
       throw new Error(`Missing required option: ${aliasStr}--${key}`);
