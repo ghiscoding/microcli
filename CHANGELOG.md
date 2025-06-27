@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file. See [Conven
 
 ## [0.3.1](https://github.com/ghiscoding/cli-nano/compare/v0.3.0...v0.3.1) (2025-06-27)
 
+### Bug Fixes 
+
+* npm publish should ignore test spec files
+
 ## [0.3.0](https://github.com/ghiscoding/cli-nano/compare/v0.2.1...v0.3.0) (2025-06-27)
 
 ### Features
