@@ -8,14 +8,14 @@
 
 ## cli-nano
 
-Simple library to create command-line tool (aka CLI) which is quite similar to [`Yargs`](https://github.com/yargs/yargs), it is as configurable as Yargs but is a fraction of its size. The library is also inspired by NodeJS `parseArgs()` but is again more configurable so that we really get what we would expect from a more complete CLI tool.
+Simple library to create command-line tool (aka CLI) which is quite similar to [`Yargs`](https://github.com/yargs/yargs), it is as configurable as Yargs but is a fraction of its size. The library is also inspired by NodeJS `parseArgs()` but is again more configurable so that we really get what we would expect from a more complete CLI builder.
 
 ### Features
 - Parses arguments
 - Supports defining Positional arguments 
-  - Supports Variadic args, aka 1 or more positional args
+  - Supports Variadic args (1 or more positional args)
 - Automatically converts flags to camelCase
-  - accepts both `--camelCase` or `--kebab-case`
+  - accepts both `--camelCase` and `--kebab-case`
 - Negates flags when using the `--no-` prefix
 - Outputs version, when defined, when using `--version`
 - Outputs description and supplied help text when using `--help`
@@ -84,10 +84,10 @@ const config: Config = {
       description: 'slice a path off the bottom of the paths',
       default: 1,
     },
-    bar: {
-      alias: 'b',
+    display: {
+      alias: 'D',
       required: true,
-      description: 'a required bar option',
+      description: 'a required display option',
     }
   },
   version: '0.1.6',
@@ -113,19 +113,19 @@ serve --version
 serve dist/index.html
 
 # With required and optional positionals
-serve index1.html index2.html 8080 -b value
+serve index1.html index2.html 8080 -D value
 
 # With boolean and array options
-serve index.html 7000 --dryRun --exclude pattern1 --exclude pattern2 -b value
+serve index.html 7000 --dryRun --exclude pattern1 --exclude pattern2 -D value
 
 # With negated boolean
-serve index.html 7000 --no-dryRun -b value
+serve index.html 7000 --no-dryRun -D value
 
 # With short aliases
-serve index.html 7000 -d -e pattern1 -e pattern2 -b value
+serve index.html 7000 -d -e pattern1 -e pattern2 -D value
 
 # With number option
-serve index.html 7000 --up 2 -b value
+serve index.html 7000 --up 2 -D value
 ```
 
 #### Notes
