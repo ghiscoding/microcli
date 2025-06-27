@@ -1,6 +1,6 @@
 {
   "name": "cli-nano",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Mini command-line tool similar to `yargs` or `parseArgs` from Node.js that accepts positional arguments, flags and options.",
   "type": "module",
   "main": "./dist/index.js",
@@ -28,30 +28,6 @@
   },
   "bugs": {
     "url": "https://github.com/ghiscoding/cli-nano/issues"
-  },
-  "scripts": {
-    "clean": "premove dist",
-    "build": "npm run clean && npm run biome:write && tsc",
-    "biome:check": "npm run biome:lint:check && npm run biome:format:check",
-    "biome:write": "npm run biome:lint:write && npm run biome:format:write",
-    "biome:lint:check": "biome lint ./src",
-    "biome:lint:write": "biome lint --write ./src",
-    "biome:format:check": "biome format ./src",
-    "biome:format:write": "biome format --write ./src",
-    "preview:release": "release-it --only-version --dry-run",
-    "release": "release-it --only-version",
-    "test": "vitest --watch --config ./vitest.config.mts",
-    "test:coverage": "vitest --coverage --config ./vitest.config.mts"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^2.0.5",
-    "@release-it/conventional-changelog": "^10.0.1",
-    "@types/node": "^22.15.33",
-    "@vitest/coverage-v8": "^3.2.4",
-    "premove": "^4.0.0",
-    "release-it": "^19.0.3",
-    "typescript": "^5.8.3",
-    "vitest": "^3.2.4"
   },
   "engines": {
     "node": ">=20.0.0"
