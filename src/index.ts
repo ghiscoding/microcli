@@ -30,9 +30,20 @@ export function parseArgs(config: Config): Record<string, any> {
     process.exit(0);
   }
 
+  // Validate: required positionals must come before optional ones
+  const positionals = command.positional ?? [];
+  let foundOptional = false;
+  for (const pos of positionals) {
+    if (!pos.required) {
+      foundOptional = true;
+    }
+    if (foundOptional && pos.required) {
+      throw new Error(`Invalid positional argument configuration: required positional "${pos.name}" cannot follow optional positional(s).`);
+    }
+  }
+
   // Handle positional arguments
   let argIndex = 0;
-  const positionals = command.positional ?? [];
   const nonOptionArgs: string[] = [];
   while (argIndex < args.length && !args[argIndex].startsWith('-')) {
     nonOptionArgs.push(args[argIndex]);
