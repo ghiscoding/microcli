@@ -8,7 +8,7 @@
 
 ## cli-nano
 
-Simple library to create command-line tool (aka CLI) which is quite similar to `Yargs`, it is as configurable as Yargs but in a fraction of its size. The library is also inspired by NodeJS `parseArgs()` to create command-line tool (aka CLI) but is a lot more complete into what we need to create a more complete CLI.
+Simple library to create command-line tool (aka CLI) which is quite similar to [`Yargs`](https://github.com/yargs/yargs), it is as configurable as Yargs but is a fraction of its size. The library is also inspired by NodeJS `parseArgs()` but is again more configurable so that we really get what we would expect from a more complete CLI tool.
 
 ### Features
 - Parses arguments
