@@ -8,14 +8,17 @@
 
 ## cli-nano
 
-Super small custom CLI similar to `Yargs` but much smaller, it uses a similar approach to NodeJS `parseArgs()` to create command-line tool (aka CLI). It is much more complete than NodeJS `parseArgs()` since it supports Positional Arguments, negated flags and also accepts both syntax `--camelCase` and/or `--kebab-case`.
+Simple library to create command-line tool (aka CLI) which is quite similar to `Yargs`, it is as configurable as Yargs but in a fraction of its size. The library is also inspired by NodeJS `parseArgs()` to create command-line tool (aka CLI) but is a lot more complete into what we need to create a more complete CLI.
 
 ### Features
 - Parses arguments
-- Converts flags to camelCase
+- Supports defining Positional arguments 
+  - Supports Variadic args, aka 1 or more positional args
+- Automatically converts flags to camelCase
+  - accepts both `--camelCase` or `--kebab-case`
 - Negates flags when using the `--no-` prefix
-- Outputs version when `--version`
-- Outputs description and supplied help text when `--help`
+- Outputs version, when defined, when using `--version`
+- Outputs description and supplied help text when using `--help`
 - Supports defining `required` options
 - Supports `default` values
 - No dependencies!
@@ -38,18 +41,19 @@ const config: Config = {
     description: 'Start a server with the given options',
     positional: [
       {
+        name: 'input',
+        description: 'serving files or directory',
+        type: 'string',
+        variadic: true, // 1 or more
+        required: true,
+      },
+      {
         name: 'port',
         type: 'number',
         description: 'port to bind on',
         required: false,
-        default: 5000, // optional default value for positional
-      },
-      {
-        name: 'output',
-        description: 'output directory',
-        type: 'string',
-        required: false,
-      },
+        default: 5000, // optional default value
+      },      
     ],
   },
   options: {
@@ -99,29 +103,29 @@ console.log(args);
 #### Example CLI Calls
 
 ```sh
-# Show help
+# Show help guide (created by reading CLI config)
 serve --help
 
-# Show version
+# Show version (when defined)
 serve --version
 
 # Uses default port 5000
-serve output/
+serve dist/index.html
 
 # With required and optional positionals
-serve file1.html file2.html output/ -b value
+serve index1.html index2.html 8080 -b value
 
 # With boolean and array options
-serve file1.html output/ --dryRun --exclude pattern1 --exclude pattern2 -b value
+serve index.html 7000 --dryRun --exclude pattern1 --exclude pattern2 -b value
 
 # With negated boolean
-serve file1.html output/ --no-dryRun -b value
+serve index.html 7000 --no-dryRun -b value
 
 # With short aliases
-serve file1.html output/ -d -e pattern1 -e pattern2 -b value
+serve index.html 7000 -d -e pattern1 -e pattern2 -b value
 
 # With number option
-serve file1.html output/ --up 2 -b value
+serve index.html 7000 --up 2 -b value
 ```
 
 #### Notes
