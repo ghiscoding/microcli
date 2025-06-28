@@ -140,3 +140,9 @@ serve index.html 7000 --up 2 -D value
 - **Aliases**: Use `alias` for short flags (e.g., `-d` for `--dryRun`).
 
 See [examples/](examples/) for more usage patterns.
+
+## Used by
+
+`cli-nano` is currently used in these other projects of mine (feel free to edit this list):
+
+- [native-copyfiles](https://github.com/ghiscoding/native-copyfiles)
