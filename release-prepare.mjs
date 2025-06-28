@@ -11,7 +11,7 @@ class ReleaseItPackageCleanPlugin extends Plugin {
     this.modifiedPackageJson = null;
   }
 
-  async beforeStage() {
+  async beforePublish() {
     // Read original package.json
     const originalContent = await readFile(this.packageJsonPath, 'utf8');
     const originalPackageJson = JSON.parse(originalContent);
@@ -36,12 +36,9 @@ class ReleaseItPackageCleanPlugin extends Plugin {
     await writeFile(this.packageJsonPath, JSON.stringify(packageJson, null, 2));
 
     console.log('Created backup and cleaned package.json for publishing');
-
-    // Prevent staging the changes
-    return false;
   }
 
-  async afterRelease() {
+  async afterPublish() {
     // Restore original package.json from backup
     if (this.originalPackageJson) {
       const backupContent = await readFile(this.backupPackageJsonPath, 'utf8');
