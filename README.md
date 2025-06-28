@@ -14,11 +14,11 @@ Simple library to create command-line tool (aka CLI) which is quite similar to [
 - Parses arguments
 - Supports defining Positional arguments 
   - Supports Variadic args (1 or more positional args)
-- Automatically converts flags to camelCase
+- Automatically converts flags to camelCase to match config options
   - accepts both `--camelCase` and `--kebab-case`
 - Negates flags when using the `--no-` prefix
-- Outputs version, when defined, when using `--version`
-- Outputs description and supplied help text when using `--help`
+- Outputs version, when defined, by using `--version`
+- Outputs description and supplied help text by using `--help`
 - Supports defining `required` options
 - Supports `default` values
 - No dependencies!
