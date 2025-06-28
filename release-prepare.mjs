@@ -21,7 +21,7 @@ class ReleaseItPackageCleanPlugin extends Plugin {
     await copyFile(this.packageJsonPath, this.backupPackageJsonPath);
 
     // Remove specified fields using npm pkg
-    for (const field of this.fieldsToRemove) {
+    for (let field of this.fieldsToRemove) {
       try {
         execSync(`npm pkg delete ${field}`, { stdio: 'inherit' });
       } catch (error) {
@@ -30,6 +30,11 @@ class ReleaseItPackageCleanPlugin extends Plugin {
     }
 
     console.log('Cleaned package.json for publishing');
+  }
+
+  async release() {
+    // Perform the actual npm publish using the default release-it mechanism
+    return true;
   }
 
   async afterRelease() {
