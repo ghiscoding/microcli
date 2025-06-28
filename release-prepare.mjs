@@ -26,6 +26,8 @@ class ReleaseItPackageCleanPlugin extends Plugin {
 
     // Create a copy of the package.json without the specified fields
     const cleanPackageJson = { ...this.originalPackageJson };
+    // Ensure the version is updated in the clean package.json
+    cleanPackageJson.version = this.newVersion || cleanPackageJson.version;
 
     this.fieldsToRemove.forEach(field => {
       if (cleanPackageJson.hasOwnProperty(field)) {
@@ -56,5 +58,3 @@ class ReleaseItPackageCleanPlugin extends Plugin {
     }
   }
 }
-
-export default ReleaseItPackageCleanPlugin;
