@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.5](https://github.com/ghiscoding/cli-nano/compare/v0.3.4...v0.3.5) (2025-06-28)
+
+### Bug Fixes
+
+* strip package fields w/releasing but add back after npm publish ([8983b3a](https://github.com/ghiscoding/cli-nano/commit/8983b3ae8c83765b97441994b139342c8a542131))
+
 ## [0.3.4](https://github.com/ghiscoding/cli-nano/compare/v0.3.3...v0.3.4) (2025-06-28)
 
 ### Bug Fixes
