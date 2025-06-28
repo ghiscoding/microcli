@@ -10,6 +10,12 @@ class ReleaseItPackageCleanPlugin extends Plugin {
     this.backupPackageJsonPath = path.join(process.cwd(), 'package.json.backup');
     this.fieldsToRemove = ['devDependencies', 'scripts', 'workspaces', 'private'];
     this.originalPackageJson = null;
+    this.newVersion = null;
+  }
+
+  async bump(version) {
+    // Store the new version for later use
+    this.newVersion = version;
   }
 
   async beforeRelease() {
@@ -41,8 +47,8 @@ class ReleaseItPackageCleanPlugin extends Plugin {
     try {
       // Restore the original package.json with the new version
       if (this.originalPackageJson) {
-        const currentPackageJson = JSON.parse(await readFile(this.packageJsonPath, 'utf8'));
-        this.originalPackageJson.version = currentPackageJson.version;
+        // Ensure the version is updated
+        this.originalPackageJson.version = this.newVersion || this.originalPackageJson.version;
 
         // Write back the original package.json with updated version
         await writeFile(this.packageJsonPath, JSON.stringify(this.originalPackageJson, null, 2));
