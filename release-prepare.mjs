@@ -58,3 +58,5 @@ class ReleaseItPackageCleanPlugin extends Plugin {
     }
   }
 }
+
+export default ReleaseItPackageCleanPlugin;
