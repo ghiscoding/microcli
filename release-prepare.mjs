@@ -1,5 +1,3 @@
-// release-prepare.mjs
-
 import { readFile, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { Plugin } from 'release-it';
@@ -10,31 +8,37 @@ class ReleaseItPackageCleanPlugin extends Plugin {
     this.packageJsonPath = path.join(process.cwd(), 'package.json');
     this.backupPackageJsonPath = path.join(process.cwd(), 'package.json.backup');
     this.originalPackageJson = null;
-    this.newVersion = null;
+    this.modifiedPackageJson = null;
   }
 
-  async beforeRelease() {
+  async beforeStage() {
     // Read original package.json
     const originalContent = await readFile(this.packageJsonPath, 'utf8');
     const originalPackageJson = JSON.parse(originalContent);
 
     // Store original content for restoration
-    this.originalPackageJson = originalContent;
+    this.originalPackageJson = originalPackageJson;
 
-    // Create backup
-    await writeFile(this.backupPackageJsonPath, originalContent);
-
-    // Modify package.json
+    // Create a copy to modify
     const packageJson = { ...originalPackageJson };
 
     const fieldsToRemove = ['devDependencies', 'scripts', 'workspaces', 'private'];
 
     fieldsToRemove.forEach(field => delete packageJson[field]);
 
+    // Store modified package.json
+    this.modifiedPackageJson = packageJson;
+
+    // Create backup of original
+    await writeFile(this.backupPackageJsonPath, JSON.stringify(originalPackageJson, null, 2));
+
     // Write modified package.json
     await writeFile(this.packageJsonPath, JSON.stringify(packageJson, null, 2));
 
     console.log('Created backup and cleaned package.json for publishing');
+
+    // Prevent staging the changes
+    return false;
   }
 
   async afterRelease() {
@@ -47,7 +51,7 @@ class ReleaseItPackageCleanPlugin extends Plugin {
       // Update version in the backup package.json to match the new version
       backupPackageJson.version = currentPackageJson.version;
 
-      // Write back the updated backup content
+      // Write back the original content with updated version
       await writeFile(this.packageJsonPath, JSON.stringify(backupPackageJson, null, 2));
 
       // Remove backup file
