@@ -1,9 +1,9 @@
 import { copyFile, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
+const fieldsToRemove = ['devDependencies', 'scripts'];
 const packageJsonPath = path.join(process.cwd(), 'package.json');
 const backupPath = path.join(process.cwd(), 'package.json.bak');
-const fieldsToRemove = ['devDependencies', 'scripts', 'workspaces', 'private'];
 
 async function main() {
   // Backup the current package.json (with new version)
