@@ -1,4 +1,5 @@
-import { readFile, unlink, writeFile } from 'node:fs/promises';
+import { execSync } from 'node:child_process';
+import { copyFile, readFile, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { Plugin } from 'release-it';
 
@@ -7,54 +8,52 @@ class ReleaseItPackageCleanPlugin extends Plugin {
     super();
     this.packageJsonPath = path.join(process.cwd(), 'package.json');
     this.backupPackageJsonPath = path.join(process.cwd(), 'package.json.backup');
-    this.originalPackageJson = null;
-    this.modifiedPackageJson = null;
+    this.fieldsToRemove = ['devDependencies', 'scripts', 'workspaces', 'private'];
+    this.newVersion = null;
   }
 
-  async beforePublish() {
-    // Read original package.json
-    const originalContent = await readFile(this.packageJsonPath, 'utf8');
-    const originalPackageJson = JSON.parse(originalContent);
-
-    // Store original content for restoration
-    this.originalPackageJson = originalPackageJson;
-
-    // Create a copy to modify
-    const packageJson = { ...originalPackageJson };
-
-    const fieldsToRemove = ['devDependencies', 'scripts', 'workspaces', 'private'];
-
-    fieldsToRemove.forEach(field => delete packageJson[field]);
-
-    // Store modified package.json
-    this.modifiedPackageJson = packageJson;
-
-    // Create backup of original
-    await writeFile(this.backupPackageJsonPath, JSON.stringify(originalPackageJson, null, 2));
-
-    // Write modified package.json
-    await writeFile(this.packageJsonPath, JSON.stringify(packageJson, null, 2));
-
-    console.log('Created backup and cleaned package.json for publishing');
+  // Capture the new version during the bump phase
+  async bump(version) {
+    this.newVersion = version;
   }
 
-  async afterPublish() {
-    // Restore original package.json from backup
-    if (this.originalPackageJson) {
+  async beforeRelease() {
+    // Create a backup of package.json
+    await copyFile(this.packageJsonPath, this.backupPackageJsonPath);
+
+    // Remove specified fields using npm pkg
+    for (const field of this.fieldsToRemove) {
+      try {
+        execSync(`npm pkg delete ${field}`, { stdio: 'inherit' });
+      } catch (error) {
+        console.error(`Failed to remove ${field}:`, error);
+      }
+    }
+
+    console.log('Cleaned package.json for publishing');
+  }
+
+  async afterRelease() {
+    try {
+      // Read the backup file
       const backupContent = await readFile(this.backupPackageJsonPath, 'utf8');
       const backupPackageJson = JSON.parse(backupContent);
-      const currentPackageJson = JSON.parse(await readFile(this.packageJsonPath, 'utf8'));
 
-      // Update version in the backup package.json to match the new version
-      backupPackageJson.version = currentPackageJson.version;
+      // Update the version in the original package.json
+      if (this.newVersion) {
+        backupPackageJson.version = this.newVersion;
+      }
 
-      // Write back the original content with updated version
+      // Write back the original package.json with updated version
       await writeFile(this.packageJsonPath, JSON.stringify(backupPackageJson, null, 2));
 
-      // Remove backup file
+      // Remove the backup file
       await unlink(this.backupPackageJsonPath);
 
-      console.log('Restored and updated package.json with new version');
+      console.log('Restored original package.json with new version');
+    } catch (error) {
+      console.error('Error in afterRelease:', error);
+      throw error;
     }
   }
 }
