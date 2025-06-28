@@ -38,7 +38,7 @@
     "biome:lint:write": "biome lint --write ./src",
     "biome:format:check": "biome format ./src",
     "biome:format:write": "biome format --write ./src",
-    "preview:release": "release-it --only-version --dry-run",
+    "preview:release": "release-it --only-version --dry-run --no-git",
     "release": "release-it --only-version",
     "test": "vitest --watch --config ./vitest.config.mts",
     "test:coverage": "vitest --coverage --config ./vitest.config.mts"
