@@ -258,7 +258,7 @@ describe('parseArgs', () => {
       vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
       try {
         parseArgs(configWithLongDesc);
-      } catch (error: any) {
+      } catch {
         // The truncated string should end with '...'
         expect(consoleLogSpy).toHaveBeenCalledWith(
           expect.stringContaining('  -l, --longdesc      This is a very long description that should be truncated with ... [boolean]'),
