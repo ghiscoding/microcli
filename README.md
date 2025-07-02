@@ -146,3 +146,4 @@ See [examples/](examples/) for more usage patterns.
 `cli-nano` is currently used in these other projects of mine (feel free to edit this list):
 
 - [native-copyfiles](https://github.com/ghiscoding/native-copyfiles)
+- [remove-glob](https://github.com/ghiscoding/remove-glob)
