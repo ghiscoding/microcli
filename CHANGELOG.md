@@ -1,6 +1,18 @@
 # Change Log
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.0](https://github.com/ghiscoding/cli-nano/compare/v0.3.10...v1.0.0) (2025-07-02)
+
+### ⚠ BREAKING CHANGES
+
+* `positional` prop should be plural
+
+### Bug Fixes
+
+* `positional` prop should be plural ([16352bb](https://github.com/ghiscoding/cli-nano/commit/16352bb5b6f10ed6016b66a52266534809ebb615))
+* should be able to parse options with/without equals sign (`=`) ([9c559ff](https://github.com/ghiscoding/cli-nano/commit/9c559ffa4aacfe5d623f69222463fdd3989efdfb))
+* use correct github project link in license ([f56a50f](https://github.com/ghiscoding/cli-nano/commit/f56a50fc4558195108515fa6a9037d425ac9763b))
+
 ## [0.3.10](https://github.com/ghiscoding/cli-nano/compare/v0.3.9...v0.3.10) (2025-06-28)
 
 ### Bug Fixes
