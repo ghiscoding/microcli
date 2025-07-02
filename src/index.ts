@@ -5,7 +5,15 @@ export type * from './interfaces.js';
 
 export function parseArgs(config: Config): Record<string, any> {
   const { command, options, version } = config;
-  const args = process.argv.slice(2);
+
+  // Normalize args to support --option=value and -o=value
+  const args = process.argv.slice(2).flatMap(arg => {
+    if (/^--?\w[\w-]*=/.test(arg)) {
+      const [flag, ...rest] = arg.split('=');
+      return [flag, rest.join('=')];
+    }
+    return arg;
+  });
   const result: Record<string, any> = {};
 
   // Check for duplicate aliases

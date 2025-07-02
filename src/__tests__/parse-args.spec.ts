@@ -744,4 +744,12 @@ describe('parseArgs', () => {
     const result = parseArgs(configWithDefault);
     expect(result.follow).toBe(true);
   });
+
+  it('should parse options passed with = (equals sign)', () => {
+    const args = ['file1.txt', 'output/', '--exclude=pattern1', '-e=pattern2', '--bar=value'];
+    vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
+    const result = parseArgs(config);
+    expect(result.exclude).toEqual(['pattern1', 'pattern2']);
+    expect(result.bar).toBe('value');
+  });
 });
