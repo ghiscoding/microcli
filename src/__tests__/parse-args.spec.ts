@@ -220,11 +220,11 @@ describe('parseArgs', () => {
           expect.stringContaining('  inFile              source files                                                     [string]'),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('  -d, --dryRun        Show what would be copied, but do not actually copy any files    [boolean]'),
+          expect.stringContaining('  -d, --dryRun        Show what would be copied, but do not actually copy any files     [boolean]'),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(
           expect.stringContaining(
-            '  -b, --bar           a required bar option                                            [string][required]',
+            '  -b, --bar           a required bar option                                             [string][required]',
           ),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('\nDefault options:'));
@@ -233,6 +233,35 @@ describe('parseArgs', () => {
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(
           expect.stringContaining('  -v, --version       Show version number                                              [boolean]'),
+        );
+        done();
+      }
+    }));
+
+  it('should truncate long descriptions with ellipsis in help output', () =>
+    new Promise((done: any) => {
+      const longDesc =
+        'This is a very long description that should be truncated with an ellipsis if it exceeds the maximum allowed length for display in the help output. It keeps going and going and going...';
+      const configWithLongDesc: Config = {
+        ...config,
+        options: {
+          ...config.options,
+          longdesc: {
+            alias: 'l',
+            type: 'boolean',
+            description: longDesc,
+          },
+        },
+      };
+      const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      const args = ['--help'];
+      vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
+      try {
+        parseArgs(configWithLongDesc);
+      } catch (error: any) {
+        // The truncated string should end with '...'
+        expect(consoleLogSpy).toHaveBeenCalledWith(
+          expect.stringContaining('  -l, --longdesc      This is a very long description that should be truncated with ... [boolean]'),
         );
         done();
       }

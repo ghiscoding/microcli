@@ -235,6 +235,11 @@ export function parseArgs(config: Config): Record<string, any> {
 function printHelp(config: Config) {
   const { command, options, version } = config;
 
+  // Helper to truncate with ellipsis
+  function truncateDesc(desc: string, max: number) {
+    return desc.length > max ? `${desc.slice(0, max - 3)}...` : desc;
+  }
+
   // Build usage string for positionals
   const usagePositionals = (command.positionals ?? [])
     .map(p => {
@@ -249,18 +254,19 @@ function printHelp(config: Config) {
   console.log(`  ${command.name} ${usagePositionals} [options]  ${command.description}`);
   console.log('\nPositionals:');
   command.positionals?.forEach(arg => {
-    console.log(`  ${arg.name.padEnd(20)}${arg.description.slice(0, 65).padEnd(65)}[${arg.type || 'string'}]`);
+    let desc = truncateDesc(arg.description, 65);
+    desc = desc.padEnd(65); // Always pad to 65 chars for alignment
+    console.log(`  ${arg.name.padEnd(20)}${desc}[${arg.type || 'string'}]`);
   });
 
-  // Build usage string for options
   console.log('\nOptions:');
   Object.keys(options).forEach(key => {
     const option = options[key];
     const requiredStr = option.required ? '[required]' : '';
     const aliasStr = option.alias ? `-${option.alias}, ` : '';
-    console.log(
-      `  ${aliasStr.padEnd(4)}--${key.padEnd(14)}${(option.description || '').slice(0, 65).padEnd(65)}[${option.type || 'string'}]${requiredStr}`,
-    );
+    let desc = truncateDesc(option.description || '', 65);
+    desc = desc.padEnd(65); // Always pad to 65 chars for alignment
+    console.log(`  ${aliasStr.padEnd(4)}--${key.padEnd(14)}${desc} [${option.type || 'string'}]${requiredStr}`);
   });
 
   // Print default options (help and version)
