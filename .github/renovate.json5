@@ -6,4 +6,5 @@
   rangeStrategy: 'bump',
   packageRules: [],
   schedule: ['every 3 months'],
+  ignoreDeps: ['node'],
 }
