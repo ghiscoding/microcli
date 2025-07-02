@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/ghiscoding/cli-nano/compare/v1.0.0...v1.0.1) (2025-07-02)
+
+### Bug Fixes
+
+* long CLI option descriptions should be truncated with ellipsis ([d580081](https://github.com/ghiscoding/cli-nano/commit/d580081ccdbf8484784748c6d6f4699ae8d02202))
+
 ## [1.0.0](https://github.com/ghiscoding/cli-nano/compare/v0.3.10...v1.0.0) (2025-07-02)
 
 ### ⚠ BREAKING CHANGES
