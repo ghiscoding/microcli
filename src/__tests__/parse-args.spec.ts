@@ -7,7 +7,7 @@ const config: Config = {
   command: {
     name: 'copyfiles',
     description: 'Copy files from a source to a destination directory',
-    positional: [
+    positionals: [
       {
         name: 'inFile',
         description: 'source files',
@@ -137,19 +137,19 @@ describe('parseArgs', () => {
   it('should throw an error for unknown options', () => {
     const args = ['file1.txt', 'output/', '-b', 'value', '--unknown'];
     vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
-    expect(() => parseArgs(config)).toThrowError('Unknown option: unknown');
+    expect(() => parseArgs(config)).toThrowError('Unknown CLI option: unknown');
   });
 
   it('should throw an error for unknown kebab-case options', () => {
     const args = ['file1.txt', 'output/', '-b', 'value', '--unknown-kebab'];
     vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
-    expect(() => parseArgs(config)).toThrowError('Unknown option: unknown-kebab');
+    expect(() => parseArgs(config)).toThrowError('Unknown CLI option: unknown-kebab');
   });
 
   it('should throw an error for unknown camelCase options', () => {
     const args = ['file1.txt', 'output/', '-b', 'value', '--unknownCamel'];
     vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
-    expect(() => parseArgs(config)).toThrowError('Unknown option: unknownCamel');
+    expect(() => parseArgs(config)).toThrowError('Unknown CLI option: unknownCamel');
   });
 
   it('should throw when truthy and --no camelCase prefix arguments are both provided', () => {
@@ -257,7 +257,7 @@ describe('parseArgs', () => {
       command: {
         name: 'test',
         description: 'Test optional variadic',
-        positional: [
+        positionals: [
           {
             name: 'outDir',
             description: 'output directory',
@@ -294,7 +294,7 @@ describe('parseArgs', () => {
       command: {
         name: 'test',
         description: 'Test optional variadic',
-        positional: [
+        positionals: [
           {
             name: 'inputs',
             description: 'input files',
@@ -324,7 +324,7 @@ describe('parseArgs', () => {
       ...config,
       command: {
         ...config.command,
-        positional: [
+        positionals: [
           {
             name: 'inFile',
             description: 'source files',
@@ -467,7 +467,7 @@ describe('parseArgs', () => {
     };
     const args = ['file1.txt', 'output/', '-x', '-b', 'value'];
     vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
-    expect(() => parseArgs(configWithNoAlias)).toThrow('Unknown option: x');
+    expect(() => parseArgs(configWithNoAlias)).toThrow('Unknown CLI option: x');
   });
 
   it('should print usage with optional positional argument', () => {
@@ -475,7 +475,7 @@ describe('parseArgs', () => {
       ...config,
       command: {
         ...config.command,
-        positional: [
+        positionals: [
           {
             name: 'inFile',
             description: 'source files',
@@ -504,7 +504,7 @@ describe('parseArgs', () => {
       command: {
         name: 'test',
         description: 'Test default positional',
-        positional: [
+        positionals: [
           {
             name: 'outDir',
             description: 'output directory',
@@ -534,7 +534,7 @@ describe('parseArgs', () => {
       command: {
         name: 'badcli',
         description: 'Invalid CLI',
-        positional: [
+        positionals: [
           { name: 'foo', description: '', required: false },
           { name: 'bar', description: '', required: true },
         ],
@@ -552,7 +552,7 @@ describe('parseArgs', () => {
       command: {
         name: 'test',
         description: 'Test default variadic positional',
-        positional: [
+        positionals: [
           {
             name: 'outDir',
             description: 'output directory',

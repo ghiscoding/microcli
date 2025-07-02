@@ -6,7 +6,7 @@ const config = {
   command: {
     name: 'copyfiles',
     description: 'Copy files from a source to a destination directory',
-    positional: [
+    positionals: [
       {
         name: 'inFile',
         description: 'Source files',

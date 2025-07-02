@@ -39,7 +39,7 @@ const config: Config = {
   command: {
     name: 'serve',
     description: 'Start a server with the given options',
-    positional: [
+    positionals: [
       {
         name: 'input',
         description: 'serving files or directory',
