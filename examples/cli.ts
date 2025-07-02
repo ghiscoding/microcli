@@ -18,7 +18,7 @@ const config: Config = {
   command: {
     name: 'copyfiles',
     description: 'Copy files from a source to a destination directory',
-    positional: [
+    positionals: [
       {
         name: 'inFile',
         description: 'Source files',
@@ -72,6 +72,7 @@ const config: Config = {
     },
     up: {
       type: 'number',
+      default: 2,
       description: 'Slice a path off the bottom of the paths',
     },
     verbose: {

@@ -31,7 +31,7 @@ export function parseArgs(config: Config): Record<string, any> {
   }
 
   // Validate: required positionals must come before optional ones
-  const positionals = command.positional ?? [];
+  const positionals = command.positionals ?? [];
   let foundOptional = false;
   for (const pos of positionals) {
     if (!pos.required) {
@@ -169,7 +169,7 @@ export function parseArgs(config: Config): Record<string, any> {
       }
 
       if (!option || !configKey) {
-        throw new Error(`Unknown option: ${arg}`);
+        throw new Error(`Unknown CLI option: ${arg}`);
       }
 
       switch (option.type) {
@@ -228,7 +228,7 @@ function printHelp(config: Config) {
   const { command, options, version } = config;
 
   // Build usage string for positionals
-  const usagePositionals = (command.positional ?? [])
+  const usagePositionals = (command.positionals ?? [])
     .map(p => {
       const variadic = p.variadic ? '..' : '';
       if (p.required) {
@@ -240,7 +240,7 @@ function printHelp(config: Config) {
   console.log('Usage:');
   console.log(`  ${command.name} ${usagePositionals} [options]  ${command.description}`);
   console.log('\nPositionals:');
-  command.positional?.forEach(arg => {
+  command.positionals?.forEach(arg => {
     console.log(`  ${arg.name.padEnd(20)}${arg.description.slice(0, 65).padEnd(65)}[${arg.type || 'string'}]`);
   });
 
