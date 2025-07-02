@@ -217,7 +217,7 @@ describe('parseArgs', () => {
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('\nPositionals:'));
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('  inFile              source files                                                     [string]'),
+          expect.stringContaining('  inFile              source files                                                      [string]'),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(
           expect.stringContaining('  -d, --dryRun        Show what would be copied, but do not actually copy any files     [boolean]'),
@@ -229,10 +229,10 @@ describe('parseArgs', () => {
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('\nDefault options:'));
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('  -h, --help          Show help                                                        [boolean]'),
+          expect.stringContaining('  -h, --help          Show help                                                         [boolean]'),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('  -v, --version       Show version number                                              [boolean]'),
+          expect.stringContaining('  -v, --version       Show version number                                               [boolean]'),
         );
         done();
       }

@@ -256,7 +256,7 @@ function printHelp(config: Config) {
   command.positionals?.forEach(arg => {
     let desc = truncateDesc(arg.description, 65);
     desc = desc.padEnd(65); // Always pad to 65 chars for alignment
-    console.log(`  ${arg.name.padEnd(20)}${desc}[${arg.type || 'string'}]`);
+    console.log(`  ${arg.name.padEnd(20)}${desc} [${arg.type || 'string'}]`);
   });
 
   console.log('\nOptions:');
@@ -271,9 +271,9 @@ function printHelp(config: Config) {
 
   // Print default options (help and version)
   console.log('\nDefault options:');
-  console.log(`${padString('  -h, --help', 21)} ${padString('Show help', 64)} [boolean]`);
+  console.log(`${padString('  -h, --help', 21)} ${padString('Show help', 65)} [boolean]`);
   if (version) {
-    console.log(`${padString('  -v, --version', 21)} ${padString('Show version number', 64)} [boolean]`);
+    console.log(`${padString('  -v, --version', 21)} ${padString('Show version number', 65)} [boolean]`);
   }
   console.log('\n');
 }
