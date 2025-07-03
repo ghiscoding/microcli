@@ -5,6 +5,7 @@
 [![npm](https://img.shields.io/npm/v/cli-nano.svg)](https://www.npmjs.com/package/cli-nano)
 [![npm](https://img.shields.io/npm/dy/cli-nano)](https://www.npmjs.com/package/cli-nano)
 [![npm bundle size](https://img.shields.io/bundlephobia/minzip/cli-nano?color=success&label=gzip)](https://bundlephobia.com/result?p=cli-nano)
+<a href="https://nodejs.org/en/about/previous-releases"><img src="https://img.shields.io/node/v/cli-nano.svg" alt="Node" /></a>
 
 ## cli-nano
 
