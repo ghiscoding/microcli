@@ -8,7 +8,7 @@ export default defineConfig({
       interopDefault: false,
     },
     coverage: {
-      exclude: [...configDefaults.exclude, '**/interfaces.ts', '**/examples/**', '*.mjs'],
+      exclude: [...configDefaults.exclude, '**/interfaces.ts', '**/examples/**', '**/scripts/**', '*.mjs'],
     },
     watch: false,
   },
