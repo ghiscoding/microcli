@@ -93,6 +93,45 @@ describe('parseArgs', () => {
     expect(result.dryRun).toBe(false);
   });
 
+  it('should match option alias using kebab/camel transformations for a single alias', () => {
+    const config = {
+      command: {
+        name: 'test',
+        description: '',
+        positionals: [],
+      },
+      options: {
+        fooBar: { type: 'boolean', alias: 'foo-bar', description: '' },
+        bazQux: { type: 'boolean', alias: 'bazQux', description: '' },
+      },
+      version: '1.0.0',
+    } as const;
+
+    // Should match the kebab-case alias
+    let args = ['--foo-bar'];
+    vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
+    let result = parseArgs(config);
+    expect(result.fooBar).toBe(true);
+
+    // Should match the camelCase alias
+    args = ['--bazQux'];
+    vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
+    result = parseArgs(config);
+    expect(result.bazQux).toBe(true);
+
+    // Should match the kebab-case alias with camelCase argument
+    args = ['--fooBar'];
+    vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
+    result = parseArgs(config);
+    expect(result.fooBar).toBe(true);
+
+    // Should match the camelCase alias with kebab-case argument
+    args = ['--baz-qux'];
+    vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
+    result = parseArgs(config);
+    expect(result.bazQux).toBe(true);
+  });
+
   it('should parse string options correctly', () => {
     const args = ['file1.txt', 'output/', '--up', '2', '--bar', 'value'];
     vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
@@ -339,7 +378,7 @@ describe('parseArgs', () => {
     // No inputs
     let args: string[] = [];
     vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
-    expect(() => parseArgs(config)).toThrow('Missing required positional argument, i.e.: "test <inputs>');
+    expect(() => parseArgs(config)).toThrow('Missing required positional argument, i.e.: "test <inputs..>');
 
     // Multiple inputs
     args = ['file1', 'file2'];
