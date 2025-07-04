@@ -20,11 +20,10 @@ export function parseArgs<C extends Config>(config: C): ArgsResult<C> {
   const aliasMap = new Map<string, string>();
   for (const [key, opt] of Object.entries(options)) {
     if (opt.alias) {
-      const optAlias = opt.alias as string;
-      if (aliasMap.has(optAlias)) {
-        throw new Error(`Duplicate alias detected: "${opt.alias}" used for both "${aliasMap.get(optAlias)}" and "${key}"`);
+      if (aliasMap.has(opt.alias)) {
+        throw new Error(`Duplicate alias detected: "${opt.alias}" used for both "${aliasMap.get(opt.alias)}" and "${key}"`);
       }
-      aliasMap.set(optAlias, key);
+      aliasMap.set(opt.alias, key);
     }
   }
 
@@ -65,7 +64,7 @@ export function parseArgs<C extends Config>(config: C): ArgsResult<C> {
       const remaining = positionals.length - (i + 1);
       const values = nonOptionArgs.slice(nonOptionIndex, nonOptionArgs.length - remaining);
       if (pos.required && values.length === 0) {
-        const usagePositionals = positionals.map(posArg => `<${posArg.name}>`).join(' ');
+        const usagePositionals = buildUsagePositionals(positionals);
         throw new Error(`Missing required positional argument, i.e.: "${command.name} ${usagePositionals}"`);
       }
       result[pos.name] = !pos.required && values.length === 0 && pos.default !== undefined ? pos.default : values;
@@ -81,14 +80,13 @@ export function parseArgs<C extends Config>(config: C): ArgsResult<C> {
       } else if (!pos.required && pos.default !== undefined) {
         result[pos.name] = pos.default;
       } else if (pos.required) {
-        const usagePositionals = positionals.map(posArg => `<${posArg.name}>`).join(' ');
+        const usagePositionals = buildUsagePositionals(positionals);
         throw new Error(`Missing required positional argument, i.e.: "${command.name} ${usagePositionals}"`);
       }
     }
   }
 
   // Handle options
-  // Start parsing options after all non-option args used for positionals
   argIndex = 0;
   const consumedArgs = new Set<number>();
   // Mark all nonOptionArgs indices as consumed for positionals
@@ -114,53 +112,21 @@ export function parseArgs<C extends Config>(config: C): ArgsResult<C> {
       continue;
     }
     const argOrg = args[argIndex] || '';
-    let arg = args[argIndex];
+    let arg = argOrg;
     let option: ArgumentOptions | undefined;
     let configKey: string | undefined;
 
     if (argOrg.startsWith('-')) {
       if (argOrg.startsWith('--')) {
         arg = argOrg.slice(2);
-        // Try all forms: as-is, kebab-to-camel, camel-to-kebab
-        option = options[arg] || options[kebabToCamel(arg)] || options[camelToKebab(arg).replace(/-/g, '')];
-        if (option) {
-          // Find the actual config key
-          for (const key of Object.keys(options)) {
-            if (options[key] === option) {
-              configKey = key;
-              break;
-            }
-          }
-        }
-        if (!option) {
-          // Try matching aliases in all forms
-          for (const key of Object.keys(options)) {
-            const opt = options[key];
-            if (opt.alias && (opt.alias.includes(arg) || opt.alias.includes(kebabToCamel(arg)) || opt.alias.includes(camelToKebab(arg)))) {
-              option = opt;
-              configKey = key;
-              break;
-            }
-          }
-        }
+        [option, configKey] = findOption(options, arg);
       } else if (argOrg.startsWith('-')) {
-        // alias
         arg = argOrg.slice(1);
-        if (arg) {
-          const optionKeys = Object.keys(options);
-          for (let j = 0; j < optionKeys.length; j++) {
-            const opt = options[optionKeys[j]];
-            if (opt.alias && (opt.alias === arg || opt.alias === kebabToCamel(arg) || opt.alias === camelToKebab(arg))) {
-              option = opt;
-              configKey = optionKeys[j];
-              break;
-            }
-          }
-        }
+        [option, configKey] = findOption(options, arg);
       }
 
+      // Handle negated boolean in both forms
       if (!option) {
-        // Handle negated boolean in both forms
         const isNegated = arg.startsWith('no-');
         const optionName = isNegated ? arg.slice(3) : arg;
         const camelOptionName = kebabToCamel(optionName);
@@ -231,32 +197,51 @@ export function parseArgs<C extends Config>(config: C): ArgsResult<C> {
   return result as ArgsResult<C>;
 }
 
-/** print CLI help documentation to the screen */
+/** Helper to find an option and its config key by argument name or alias. */
+function findOption(options: Record<string, ArgumentOptions>, arg: string): [ArgumentOptions | undefined, string | undefined] {
+  // Try all forms: as-is, kebab-to-camel, camel-to-kebab
+  const option = options[arg] || options[kebabToCamel(arg)] || options[camelToKebab(arg).replace(/-/g, '')];
+  if (option) {
+    const configKey = Object.keys(options).find(key => options[key] === option);
+    return [option, configKey];
+  }
+  // Try matching alias in all forms
+  for (const key of Object.keys(options)) {
+    const opt = options[key];
+    if (opt.alias && (opt.alias === arg || opt.alias === kebabToCamel(arg) || opt.alias === camelToKebab(arg))) {
+      return [opt, key];
+    }
+  }
+  return [undefined, undefined];
+}
+
+/** Format a description string to a fixed length, truncating and padding as needed. */
+function formatDesc(desc: string, max: number) {
+  const truncated = desc.length > max ? `${desc.slice(0, max - 3)}...` : desc;
+  return truncated.padEnd(max);
+}
+
+/** Build the usage string for positionals, e.g. "<input..> [output]" */
+function buildUsagePositionals(positionals: readonly any[] = []) {
+  return positionals
+    .map(p => {
+      const variadic = p.variadic ? '..' : '';
+      return p.required ? `<${p.name}${variadic}>` : `[${p.name}${variadic}]`;
+    })
+    .join(' ');
+}
+
+/** Print CLI help documentation to the screen */
 function printHelp(config: Config) {
   const { command, options, version, helpDescLength = 65 } = config;
 
-  // Helper to truncate with ellipsis
-  function truncateDesc(desc: string, max: number) {
-    return desc.length > max ? `${desc.slice(0, max - 3)}...` : desc;
-  }
+  const usagePositionals = buildUsagePositionals(command.positionals);
 
-  // Build usage string for positionals
-  const usagePositionals = (command.positionals ?? [])
-    .map(p => {
-      const variadic = p.variadic ? '..' : '';
-      if (p.required) {
-        return `<${p.name}${variadic}>`;
-      }
-      return `[${p.name}${variadic}]`;
-    })
-    .join(' ');
   console.log('Usage:');
   console.log(`  ${command.name} ${usagePositionals} [options]  ${command.description}`);
   console.log('\nPositionals:');
   command.positionals?.forEach(arg => {
-    let desc = truncateDesc(arg.description, helpDescLength);
-    desc = desc.padEnd(helpDescLength); // Always pad to x chars for alignment
-    console.log(`  ${arg.name.padEnd(20)}${desc} [${arg.type || 'string'}]`);
+    console.log(`  ${arg.name.padEnd(20)}${formatDesc(arg.description, helpDescLength)} [${arg.type || 'string'}]`);
   });
 
   console.log('\nOptions:');
@@ -264,9 +249,9 @@ function printHelp(config: Config) {
     const option = options[key];
     const requiredStr = option.required ? '[required]' : '';
     const aliasStr = option.alias ? `-${option.alias}, ` : '';
-    let desc = truncateDesc(option.description || '', helpDescLength);
-    desc = desc.padEnd(helpDescLength); // Always pad to x chars for alignment
-    console.log(`  ${aliasStr.padEnd(4)}--${key.padEnd(14)}${desc} [${option.type || 'string'}]${requiredStr}`);
+    console.log(
+      `  ${aliasStr.padEnd(4)}--${key.padEnd(14)}${formatDesc(option.description || '', helpDescLength)} [${option.type || 'string'}]${requiredStr}`,
+    );
   });
 
   // Print default options (help and version)

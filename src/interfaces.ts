@@ -5,8 +5,8 @@ export interface ArgumentOptions {
   /** description of the flag option */
   description: string;
 
-  /** defaults to undefined, provide shorter aliases as command options */
-  alias?: string | string[];
+  /** defaults to undefined, provide shorter alias as command options */
+  alias?: string;
 
   /** default value for the option if not provided */
   default?: any;
