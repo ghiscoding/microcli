@@ -56,4 +56,7 @@ export interface Config {
 
   /** CLI or package version */
   version?: string;
+
+  /** defaults to 65, length of description shown in the help */
+  helpDescLength?: number;
 }
