@@ -233,7 +233,7 @@ export function parseArgs(config: Config): Record<string, any> {
 
 /** print CLI help documentation to the screen */
 function printHelp(config: Config) {
-  const { command, options, version } = config;
+  const { command, options, version, helpDescLength = 65 } = config;
 
   // Helper to truncate with ellipsis
   function truncateDesc(desc: string, max: number) {
@@ -254,8 +254,8 @@ function printHelp(config: Config) {
   console.log(`  ${command.name} ${usagePositionals} [options]  ${command.description}`);
   console.log('\nPositionals:');
   command.positionals?.forEach(arg => {
-    let desc = truncateDesc(arg.description, 65);
-    desc = desc.padEnd(65); // Always pad to 65 chars for alignment
+    let desc = truncateDesc(arg.description, helpDescLength);
+    desc = desc.padEnd(helpDescLength); // Always pad to x chars for alignment
     console.log(`  ${arg.name.padEnd(20)}${desc} [${arg.type || 'string'}]`);
   });
 
@@ -264,16 +264,16 @@ function printHelp(config: Config) {
     const option = options[key];
     const requiredStr = option.required ? '[required]' : '';
     const aliasStr = option.alias ? `-${option.alias}, ` : '';
-    let desc = truncateDesc(option.description || '', 65);
-    desc = desc.padEnd(65); // Always pad to 65 chars for alignment
+    let desc = truncateDesc(option.description || '', helpDescLength);
+    desc = desc.padEnd(helpDescLength); // Always pad to x chars for alignment
     console.log(`  ${aliasStr.padEnd(4)}--${key.padEnd(14)}${desc} [${option.type || 'string'}]${requiredStr}`);
   });
 
   // Print default options (help and version)
   console.log('\nDefault options:');
-  console.log(`${padString('  -h, --help', 21)} ${padString('Show help', 65)} [boolean]`);
+  console.log(`${padString('  -h, --help', 21)} ${padString('Show help', helpDescLength)} [boolean]`);
   if (version) {
-    console.log(`${padString('  -v, --version', 21)} ${padString('Show version number', 65)} [boolean]`);
+    console.log(`${padString('  -v, --version', 21)} ${padString('Show version number', helpDescLength)} [boolean]`);
   }
   console.log('\n');
 }
