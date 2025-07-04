@@ -1,9 +1,9 @@
-import type { ArgumentOptions, Config } from './interfaces.js';
+import type { ArgsResult, ArgumentOptions, Config } from './interfaces.js';
 import { camelToKebab, kebabToCamel, padString } from './utils.js';
 
 export type * from './interfaces.js';
 
-export function parseArgs(config: Config): Record<string, any> {
+export function parseArgs<C extends Config>(config: C): ArgsResult<C> {
   const { command, options, version } = config;
 
   // Normalize args to support --option=value and -o=value
@@ -228,7 +228,7 @@ export function parseArgs(config: Config): Record<string, any> {
     }
   });
 
-  return result;
+  return {} as ArgsResult<C>;
 }
 
 /** print CLI help documentation to the screen */

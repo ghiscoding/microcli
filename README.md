@@ -88,6 +88,7 @@ const config: Config = {
     display: {
       alias: 'D',
       required: true,
+      type: 'boolean',
       description: 'a required display option',
     }
   },
@@ -100,6 +101,31 @@ console.log(args);
 // do something with parse arguments, for example
 // startServer(args);
 ```
+
+### Usage with Type Inference
+
+For full TypeScript auto-inference and IntelliSense of parsed arguments, define your config as a `const` and use `as const`:
+
+```ts
+const config = {
+  ... // your config object as shown above
+} as const;
+
+const args = parseArgs<typeof config>(config);
+
+// TypeScript will infer the correct types:
+args.input;   // [string, ...string[]] (required, variadic)
+args.port;    // number   (optional, has default)
+args.verbose; // boolean  (optional)
+args.display; // boolean (required)
+```
+
+> **Tip:**  
+> Using `as const` preserves literal types and tuple information, so TypeScript can infer required/optional fields and argument types automatically.  
+> If you use `const config: Config = { ... }`, you get type checking but not full IntelliSense for parsed arguments.
+
+> [!NOTE]
+> For required+variadic positionals, the type is `[string, ...string[]]` (at least one value required). For optional variadic, it's string[]. For non-variadic, it's string.
 
 #### Example CLI Calls
 

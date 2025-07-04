@@ -43,7 +43,7 @@ export interface CommandOptions {
   description: string;
 
   /** list of positional arguments */
-  positionals?: PositionalArgument[];
+  positionals?: readonly PositionalArgument[];
 }
 
 /** CLI options */
@@ -60,3 +60,54 @@ export interface Config {
   /** defaults to 65, length of description shown in the help */
   helpDescLength?: number;
 }
+
+/** Utility type to map ArgumentOptions/PositionalArgument to their value type */
+export type ArgValueType<T extends { type?: string; default?: any; variadic?: boolean; required?: boolean }> = T['type'] extends 'boolean'
+  ? boolean
+  : T['type'] extends 'number'
+    ? number
+    : T['type'] extends 'array'
+      ? T extends { variadic: true }
+        ? T extends { required: true }
+          ? [string, ...string[]]
+          : string[]
+        : string | string[]
+      : T['type'] extends 'string'
+        ? T extends { variadic: true }
+          ? T extends { required: true }
+            ? [string, ...string[]]
+            : string[]
+          : string
+        : T['type'] extends undefined
+          ? T extends { variadic: true }
+            ? T extends { required: true }
+              ? [string, ...string[]]
+              : string[]
+            : string
+          : T['default'] extends undefined
+            ? string
+            : T['default'];
+
+/** Helper to get required keys */
+type RequiredKeys<T> = {
+  [K in keyof T]: T[K] extends { required: true } ? K : never;
+}[keyof T];
+
+/** Helper to get optional keys */
+type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
+
+/** Map options record to an object type with required/optional properties */
+export type OptionsToObject<T extends Record<string, any>> = { [K in RequiredKeys<T>]: ArgValueType<T[K]> } & {
+  [K in OptionalKeys<T>]?: ArgValueType<T[K]>;
+};
+
+/** Map positionals array to an object type with required/optional properties */
+export type PositionalsToObject<T extends readonly PositionalArgument[] | undefined> = T extends readonly [infer P, ...infer Rest]
+  ? P extends PositionalArgument
+    ? (P['required'] extends true ? { [K in P['name']]: ArgValueType<P> } : { [K in P['name']]?: ArgValueType<P> }) &
+        PositionalsToObject<Rest extends readonly PositionalArgument[] ? Rest : []>
+    : PositionalsToObject<Rest extends readonly PositionalArgument[] ? Rest : []>
+  : { [key: string]: never };
+
+/** The full result type for parseArgs */
+export type ArgsResult<C extends Config> = PositionalsToObject<C['command']['positionals']> & OptionsToObject<C['options']>;
