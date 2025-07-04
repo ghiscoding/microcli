@@ -228,7 +228,7 @@ export function parseArgs<C extends Config>(config: C): ArgsResult<C> {
     }
   });
 
-  return {} as ArgsResult<C>;
+  return result as ArgsResult<C>;
 }
 
 /** print CLI help documentation to the screen */
