@@ -51,14 +51,17 @@ export interface Config {
   /** CLI definition */
   command: CommandOptions;
 
+  /** option name length (w/wo alias) shown in the help (defaults to 20) */
+  helpOptLength?: number;
+
+  /** description length shown in the help (defaults to 65) */
+  helpDescLength?: number;
+
   /** CLI list of flag options */
   options: Record<string, ArgumentOptions>;
 
   /** CLI or package version */
   version?: string;
-
-  /** defaults to 65, length of description shown in the help */
-  helpDescLength?: number;
 }
 
 /** Utility type to map ArgumentOptions/PositionalArgument to their value type */
