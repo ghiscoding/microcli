@@ -60,7 +60,7 @@ const config = {
   },
   version: '0.1.6',
   helpOptLength: 18, // option name length shown in help (defaults to 20)
-  helpDescLength: 60, // description length shown in help (defaults to 65)
+  helpDescLength: 65, // description length shown in help (defaults to 65)
 };
 
 const results = parseArgs(config);

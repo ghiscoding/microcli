@@ -191,16 +191,16 @@ Usage:
   serve <input..> [port] [options]  Start a server with the given options
 
 Arguments:
-  input             serving files or directory                                   <string..>
-  port              port to bind on                                              [number]
+  input             serving files or directory                                        <string..>
+  port              port to bind on                                                   [number]
 
 Options:
-  -d, --dryRun      Show what would be done, but do not actually start the se... [boolean]
-  -e, --exclude     pattern or glob to exclude (may be passed multiple times)    [array]
-  -r, --rainbow     Enable rainbow mode                                          [boolean]
-  -V, --verbose     print more information to console                            [boolean]
-      --up          slice a path off the bottom of the paths                     [number]
-  -D, --display     a required display option                                    <boolean>
-  -h, --help        Show help                                                    [boolean]
-  -v, --version     Show version number                                          [boolean]
+  -d, --dryRun      Show what would be done, but do not actually start the server     [boolean]
+  -e, --exclude     pattern or glob to exclude (may be passed multiple times)         [array]
+  -r, --rainbow     Enable rainbow mode                                               [boolean]
+  -V, --verbose     print more information to console                                 [boolean]
+      --up          slice a path off the bottom of the paths                          [number]
+  -D, --display     a required display option                                         <boolean>
+  -h, --help        Show help                                                         [boolean]
+  -v, --version     Show version number                                               [boolean]
 ```
