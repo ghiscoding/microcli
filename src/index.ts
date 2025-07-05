@@ -197,6 +197,29 @@ export function parseArgs<C extends Config>(config: C): ArgsResult<C> {
   return result as ArgsResult<C>;
 }
 
+/** Format a text to a fixed length, truncating and padding as needed. */
+function formatHelpText(text: string, max: number) {
+  const truncated = text.length > max ? `${text.slice(0, max - 3)}...` : text;
+  return truncated.padEnd(max);
+}
+
+/** Build the usage string for positionals, e.g. "<input..> [output]" */
+function buildUsagePositionals(positionals: readonly any[] = []) {
+  return positionals
+    .map(p => {
+      const variadic = p.variadic ? '..' : '';
+      return p.required ? `<${p.name}${variadic}>` : `[${p.name}${variadic}]`;
+    })
+    .join(' ');
+}
+
+/** Format the option/argument type for help output */
+function formatOptionType(type: string | undefined, variadic?: boolean, required?: boolean) {
+  const t = type || 'string';
+  const variadicStr = variadic ? '..' : '';
+  return required ? `<${t}${variadicStr}>` : `[${t}${variadicStr}]`;
+}
+
 /** Helper to find an option and its config key by argument name or alias. */
 function findOption(options: Record<string, ArgumentOptions>, arg: string): [ArgumentOptions | undefined, string | undefined] {
   // Try all forms: as-is, kebab-to-camel, camel-to-kebab
@@ -215,43 +238,26 @@ function findOption(options: Record<string, ArgumentOptions>, arg: string): [Arg
   return [undefined, undefined];
 }
 
-/** Format a description string to a fixed length, truncating and padding as needed. */
-function formatDesc(desc: string, max: number) {
-  const truncated = desc.length > max ? `${desc.slice(0, max - 3)}...` : desc;
-  return truncated.padEnd(max);
-}
-
-/** Build the usage string for positionals, e.g. "<input..> [output]" */
-function buildUsagePositionals(positionals: readonly any[] = []) {
-  return positionals
-    .map(p => {
-      const variadic = p.variadic ? '..' : '';
-      return p.required ? `<${p.name}${variadic}>` : `[${p.name}${variadic}]`;
-    })
-    .join(' ');
-}
-
 /** Print CLI help documentation to the screen */
 function printHelp(config: Config) {
-  const { command, options, version, helpDescLength = 65 } = config;
-
+  const { command, options, version, helpOptLength = 20, helpDescLength = 65 } = config;
   const usagePositionals = buildUsagePositionals(command.positionals);
 
   console.log('Usage:');
   console.log(`  ${command.name} ${usagePositionals} [options]  ${command.description}`);
-  console.log('\nPositionals:');
+  console.log('\nArguments:');
   command.positionals?.forEach(arg => {
-    const variadic = arg.variadic ? '..' : '';
-    console.log(`  ${arg.name.padEnd(20)}${formatDesc(arg.description, helpDescLength)} [${arg.type || 'string'}${variadic}]`);
+    console.log(
+      `  ${formatHelpText(arg.name, helpOptLength)}${formatHelpText(arg.description, helpDescLength)} ${formatOptionType(arg.type, arg.variadic, arg.required)}`,
+    );
   });
 
   console.log('\nOptions:');
   Object.keys(options).forEach(key => {
     const option = options[key];
-    const requiredStr = option.required ? '[required]' : '';
     const aliasStr = option.alias ? `-${option.alias}, ` : '';
     console.log(
-      `  ${aliasStr.padEnd(4)}--${key.padEnd(14)}${formatDesc(option.description || '', helpDescLength)} [${option.type || 'string'}]${requiredStr}`,
+      `  ${aliasStr.padEnd(4)}--${formatHelpText(key, helpOptLength - 6)}${formatHelpText(option.description || '', helpDescLength)} ${formatOptionType(option.type, false, option.required)}`,
     );
   });
 
