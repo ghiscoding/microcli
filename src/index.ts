@@ -241,7 +241,8 @@ function printHelp(config: Config) {
   console.log(`  ${command.name} ${usagePositionals} [options]  ${command.description}`);
   console.log('\nPositionals:');
   command.positionals?.forEach(arg => {
-    console.log(`  ${arg.name.padEnd(20)}${formatDesc(arg.description, helpDescLength)} [${arg.type || 'string'}]`);
+    const variadic = arg.variadic ? '..' : '';
+    console.log(`  ${arg.name.padEnd(20)}${formatDesc(arg.description, helpDescLength)} [${arg.type || 'string'}${variadic}]`);
   });
 
   console.log('\nOptions:');

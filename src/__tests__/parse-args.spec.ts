@@ -292,6 +292,7 @@ describe('parseArgs', () => {
           },
         },
       };
+      config.command.positionals![0].variadic = true;
       const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
       const args = ['--help'];
       vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
@@ -300,8 +301,12 @@ describe('parseArgs', () => {
       } catch {
         // The truncated string should end with '...'
         expect(consoleLogSpy).toHaveBeenCalledWith(
+          expect.stringContaining('  inFile              source files                                                      [string..]'),
+        );
+        expect(consoleLogSpy).toHaveBeenCalledWith(
           expect.stringContaining('  -l, --longdesc      This is a very long description that should be truncated with ... [boolean]'),
         );
+        delete config.command.positionals![0].variadic;
         done();
       }
     }));
