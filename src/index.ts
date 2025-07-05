@@ -1,5 +1,4 @@
 import type { ArgsResult, ArgumentOptions, Config } from './interfaces.js';
-import { camelToKebab, kebabToCamel } from './utils.js';
 
 export type * from './interfaces.js';
 
@@ -267,4 +266,14 @@ function printHelp(config: Config) {
       `  ${aliasStr.padEnd(4)}--${formatHelpText(key, helpOptLength - 6)}${formatHelpText(option.description || '', helpDescLength)} ${formatOptionType(option.type, false, option.required)}`,
     );
   }
+}
+
+/** Utility to convert kebab-case to camelCase */
+function kebabToCamel(str: string) {
+  return str.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+}
+
+/** Utility to convert camelCase to kebab-case */
+function camelToKebab(str: string) {
+  return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 }
