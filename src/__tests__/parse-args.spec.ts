@@ -254,17 +254,15 @@ describe('parseArgs', () => {
         expect(consoleLogSpy).toHaveBeenCalledWith(
           expect.stringContaining('copyfiles <inFile> <outDirectory> [options]  Copy files from a source to a destination directory'),
         );
-        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('\nPositionals:'));
+        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('\nArguments:'));
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('  inFile              source files                                                      [string]'),
+          expect.stringContaining('  inFile              source files                                                      <string>'),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(
           expect.stringContaining('  -d, --dryRun        Show what would be copied, but do not actually copy any files     [boolean]'),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining(
-            '  -b, --bar           a required bar option                                             [string][required]',
-          ),
+          expect.stringContaining('  -b, --bar           a required bar option                                             <string>'),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('\nDefault options:'));
         expect(consoleLogSpy).toHaveBeenCalledWith(
@@ -301,7 +299,7 @@ describe('parseArgs', () => {
       } catch {
         // The truncated string should end with '...'
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('  inFile              source files                                                      [string..]'),
+          expect.stringContaining('  inFile              source files                                                      <string..>'),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(
           expect.stringContaining('  -l, --longdesc      This is a very long description that should be truncated with ... [boolean]'),

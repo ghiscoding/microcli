@@ -233,25 +233,26 @@ function buildUsagePositionals(positionals: readonly any[] = []) {
 
 /** Print CLI help documentation to the screen */
 function printHelp(config: Config) {
-  const { command, options, version, helpDescLength = 65 } = config;
+  const { command, options, version, helpOptLength = 20, helpDescLength = 65 } = config;
 
   const usagePositionals = buildUsagePositionals(command.positionals);
 
   console.log('Usage:');
   console.log(`  ${command.name} ${usagePositionals} [options]  ${command.description}`);
-  console.log('\nPositionals:');
+  console.log('\nArguments:');
   command.positionals?.forEach(arg => {
     const variadic = arg.variadic ? '..' : '';
-    console.log(`  ${arg.name.padEnd(20)}${formatDesc(arg.description, helpDescLength)} [${arg.type || 'string'}${variadic}]`);
+    const optionType = arg.required ? `<${arg.type || 'string'}${variadic}>` : `[${arg.type || 'string'}${variadic}]`;
+    console.log(`  ${formatDesc(arg.name, helpOptLength)}${formatDesc(arg.description, helpDescLength)} ${optionType}`);
   });
 
   console.log('\nOptions:');
   Object.keys(options).forEach(key => {
     const option = options[key];
-    const requiredStr = option.required ? '[required]' : '';
+    const optionType = option.required ? `<${option.type || 'string'}>` : `[${option.type || 'string'}]`;
     const aliasStr = option.alias ? `-${option.alias}, ` : '';
     console.log(
-      `  ${aliasStr.padEnd(4)}--${key.padEnd(14)}${formatDesc(option.description || '', helpDescLength)} [${option.type || 'string'}]${requiredStr}`,
+      `  ${aliasStr.padEnd(4)}--${formatDesc(key, helpOptLength - 6)}${formatDesc(option.description || '', helpDescLength)} ${optionType}`,
     );
   });
 
