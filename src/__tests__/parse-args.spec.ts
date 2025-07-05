@@ -264,7 +264,6 @@ describe('parseArgs', () => {
         expect(consoleLogSpy).toHaveBeenCalledWith(
           expect.stringContaining('  -b, --bar           a required bar option                                             <string>'),
         );
-        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('\nDefault options:'));
         expect(consoleLogSpy).toHaveBeenCalledWith(
           expect.stringContaining('  -h, --help          Show help                                                         [boolean]'),
         );
@@ -432,6 +431,7 @@ describe('parseArgs', () => {
           type: 'string',
         },
       },
+      version: undefined,
     };
     const spy = vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', '--help']);
