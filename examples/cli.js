@@ -4,68 +4,58 @@ import { parseArgs } from '../dist/index.js';
 
 const config = {
   command: {
-    name: 'copyfiles',
-    description: 'Copy files from a source to a destination directory',
+    name: 'serve',
+    description: 'Start a server with the given options',
     positionals: [
       {
-        name: 'inFile',
-        description: 'Source files',
+        name: 'input',
+        description: 'serving files or directory',
         type: 'string',
-        variadic: true,
+        variadic: true, // 1 or more
         required: true,
       },
       {
-        name: 'outDirectory',
-        description: 'Destination directory',
-        required: true,
+        name: 'port',
+        type: 'number',
+        description: 'port to bind on',
+        required: false,
+        default: 5000, // optional default value
       },
     ],
   },
   options: {
-    all: {
-      alias: 'a',
-      type: 'boolean',
-      description: 'Include files & directories begining with a dot (.)',
-    },
     dryRun: {
       alias: 'd',
       type: 'boolean',
-      description: 'Show what would be copied, but do not actually copy any files',
-    },
-    error: {
-      alias: 'E',
-      type: 'boolean',
-      description: 'Throw error if nothing is copied',
+      description: 'Show what would be done, but do not actually start the server',
+      default: false, // optional default value
     },
     exclude: {
       alias: 'e',
       type: 'array',
-      description: 'Pattern or glob to exclude (may be passed multiple times)',
+      description: 'pattern or glob to exclude (may be passed multiple times)',
     },
-    flat: {
-      alias: 'f',
+    rainbow: {
       type: 'boolean',
-      description: 'Flatten the output',
-    },
-    follow: {
-      alias: 'F',
-      type: 'boolean',
-      description: 'Follow symbolink links',
-    },
-    stat: {
-      alias: 's',
-      type: 'boolean',
-      required: true,
-      description: 'Show statistics after execution (execution time + file count)',
-    },
-    up: {
-      type: 'number',
-      description: 'Slice a path off the bottom of the paths',
+      alias: 'r',
+      description: 'Enable rainbow mode',
+      default: true,
     },
     verbose: {
       alias: 'V',
       type: 'boolean',
-      description: 'Print more information to console',
+      description: 'print more information to console',
+    },
+    up: {
+      type: 'number',
+      description: 'slice a path off the bottom of the paths',
+      default: 1,
+    },
+    display: {
+      alias: 'D',
+      required: true,
+      type: 'boolean',
+      description: 'a required display option',
     },
   },
   version: '0.1.6',
