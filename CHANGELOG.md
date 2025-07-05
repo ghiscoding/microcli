@@ -1,6 +1,19 @@
 # Change Log
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.0](https://github.com/ghiscoding/cli-nano/compare/v1.0.2...v1.1.0) (2025-07-05)
+
+### Features
+
+* add auto type inference to parseArgs() result ([7d494fc](https://github.com/ghiscoding/cli-nano/commit/7d494fc1cb284a38259bc483ef2ae274b4a5b4e7))
+* use tsdown to minify prod build ([8d145da](https://github.com/ghiscoding/cli-nano/commit/8d145da6a517e7057a167f973df98ad7d0b04b0a))
+
+### Bug Fixes
+
+* description shown in help should be programmable ([b16724f](https://github.com/ghiscoding/cli-nano/commit/b16724f64625169d6af4cfba576bdcab2acd2ff7))
+* show required options in brackets "<option>" ([b594590](https://github.com/ghiscoding/cli-nano/commit/b5945908564289cff1c20831169c50418ab24abb))
+* variadic positional args should show as spreading ([63e948e](https://github.com/ghiscoding/cli-nano/commit/63e948ee8e94f0567ca4c74ccc6bd2cdcfd0be39))
+
 ## [1.0.2](https://github.com/ghiscoding/cli-nano/compare/v1.0.1...v1.0.2) (2025-07-02)
 
 ### Bug Fixes
