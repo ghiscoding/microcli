@@ -269,3 +269,4 @@ function printHelp(config: Config) {
   }
   console.log('\n');
 }
+
