@@ -1,7 +1,12 @@
 import type { ArgsResult, ArgumentOptions, Config } from './interfaces.js';
-import { camelToKebab, kebabToCamel, padString } from './utils.js';
+import { camelToKebab, kebabToCamel } from './utils.js';
 
 export type * from './interfaces.js';
+
+const defaultOptions: Record<string, ArgumentOptions> = {
+  help: { alias: 'h', description: 'Show help', type: 'boolean' },
+  version: { alias: 'v', description: 'Show version number', type: 'boolean' },
+};
 
 export function parseArgs<C extends Config>(config: C): ArgsResult<C> {
   const { command, options, version } = config;
@@ -253,19 +258,13 @@ function printHelp(config: Config) {
   });
 
   console.log('\nOptions:');
-  Object.keys(options).forEach(key => {
-    const option = options[key];
+  for (const [key, option] of Object.entries({ ...options, ...defaultOptions })) {
     const aliasStr = option.alias ? `-${option.alias}, ` : '';
+    if (!version && key === 'version') {
+      continue;
+    }
     console.log(
       `  ${aliasStr.padEnd(4)}--${formatHelpText(key, helpOptLength - 6)}${formatHelpText(option.description || '', helpDescLength)} ${formatOptionType(option.type, false, option.required)}`,
     );
-  });
-
-  // Print default options (help and version)
-  console.log('\nDefault options:');
-  console.log(`${padString('  -h, --help', 21)} ${padString('Show help', helpDescLength)} [boolean]`);
-  if (version) {
-    console.log(`${padString('  -v, --version', 21)} ${padString('Show version number', helpDescLength)} [boolean]`);
   }
-  console.log('\n');
 }

@@ -93,6 +93,8 @@ const config: Config = {
     }
   },
   version: '0.1.6',
+  helpOptLength: 18,  // option name length shown in help (defaults to 20)
+  helpDescLength: 60, // description length shown in help (defaults to 65)
 };
 
 const args = parseArgs(config);
@@ -174,3 +176,31 @@ See [examples/](examples/) for more usage patterns.
 
 - [native-copyfiles](https://github.com/ghiscoding/native-copyfiles)
 - [remove-glob](https://github.com/ghiscoding/remove-glob)
+
+## Help Example
+
+You can see below an example of a CLI help (which is the result of calling `--help` with the config shown avove). 
+
+Please note:
+
+- `<option>` → required
+- `[option]` → optional
+
+```
+Usage:
+  serve <input..> [port] [options]  Start a server with the given options
+
+Arguments:
+  input             serving files or directory                                   <string..>
+  port              port to bind on                                              [number]
+
+Options:
+  -d, --dryRun      Show what would be done, but do not actually start the se... [boolean]
+  -e, --exclude     pattern or glob to exclude (may be passed multiple times)    [array]
+  -r, --rainbow     Enable rainbow mode                                          [boolean]
+  -V, --verbose     print more information to console                            [boolean]
+      --up          slice a path off the bottom of the paths                     [number]
+  -D, --display     a required display option                                    <boolean>
+  -h, --help        Show help                                                    [boolean]
+  -v, --version     Show version number                                          [boolean]
+```
