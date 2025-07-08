@@ -93,8 +93,8 @@ const config: Config = {
     }
   },
   version: '0.1.6',
-  helpOptLength: 18,  // option name length shown in help (defaults to 20)
-  helpDescLength: 60, // description length shown in help (defaults to 65)
+  minHelpDescLength: 40,  // min description length shown in help (defaults to 50)
+  maxHelpDescLength: 120, // max description length shown in help (defaults to 100)
 };
 
 const args = parseArgs(config);

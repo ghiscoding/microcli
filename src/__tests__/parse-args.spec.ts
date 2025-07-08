@@ -256,19 +256,19 @@ describe('parseArgs', () => {
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('\nArguments:'));
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('  inFile              source files                                                      <string>'),
+          expect.stringContaining('  inFile          source files                                                    <string>'),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('  -d, --dryRun        Show what would be copied, but do not actually copy any files     [boolean]'),
+          expect.stringContaining('  -d, --dryRun    Show what would be copied, but do not actually copy any files   [boolean]'),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('  -b, --bar           a required bar option                                             <string>'),
+          expect.stringContaining('  -b, --bar       a required bar option                                           <string>'),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('  -h, --help          Show help                                                         [boolean]'),
+          expect.stringContaining('  -h, --help      Show help                                                       [boolean]'),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('  -v, --version       Show version number                                               [boolean]'),
+          expect.stringContaining('  -v, --version   Show version number                                             [boolean]'),
         );
         done();
       }
@@ -288,6 +288,7 @@ describe('parseArgs', () => {
             description: longDesc,
           },
         },
+        maxHelpDescLength: 60,
       };
       config.command.positionals![0].variadic = true;
       const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -298,10 +299,10 @@ describe('parseArgs', () => {
       } catch {
         // The truncated string should end with '...'
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('  inFile              source files                                                      <string..>'),
+          expect.stringContaining('  inFile           source files                                                   <string..>'),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('  -l, --longdesc      This is a very long description that should be truncated with ... [boolean]'),
+          expect.stringContaining('  -l, --longdesc   This is a very long description that should be truncated wi... [boolean]'),
         );
         delete config.command.positionals![0].variadic;
         done();
