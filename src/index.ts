@@ -1,8 +1,8 @@
-import type { ArgsResult, ArgumentOption, Config } from './interfaces.js';
+import type { ArgsResult, Config, FlagOption } from './interfaces.js';
 
 export type * from './interfaces.js';
 
-const defaultOptions: Record<string, ArgumentOption> = {
+const defaultOptions: Record<string, FlagOption> = {
   help: { alias: 'h', description: 'Show help', type: 'boolean' },
   version: { alias: 'v', description: 'Show version number', type: 'boolean' },
 };
@@ -117,7 +117,7 @@ export function parseArgs<C extends Config>(config: C): ArgsResult<C> {
     }
     const argOrg = args[argIndex] || '';
     let arg = argOrg;
-    let option: ArgumentOption | undefined;
+    let option: FlagOption | undefined;
     let configKey: string | undefined;
 
     if (argOrg.startsWith('-')) {
@@ -225,7 +225,7 @@ function formatOptionType(type: string | undefined, variadic?: boolean, required
 }
 
 /** Helper to find an option and its config key by argument name or alias. */
-function findOption(options: Record<string, ArgumentOption>, arg: string): [ArgumentOption | undefined, string | undefined] {
+function findOption(options: Record<string, FlagOption>, arg: string): [FlagOption | undefined, string | undefined] {
   // Try all forms: as-is, kebab-to-camel, camel-to-kebab
   const option = options[arg] || options[kebabToCamel(arg)] || options[camelToKebab(arg).replace(/-/g, '')];
   if (option) {
@@ -290,7 +290,7 @@ function printHelp(config: Config) {
       acc[group].push([key, option]);
       return acc;
     },
-    {} as Record<string, [string, ArgumentOption][]>,
+    {} as Record<string, [string, FlagOption][]>,
   );
 
   Object.keys(groupedOptions).forEach(group => {

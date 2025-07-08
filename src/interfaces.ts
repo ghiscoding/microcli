@@ -1,4 +1,4 @@
-export interface ArgumentOption {
+export interface FlagOption {
   /** option type */
   type?: 'string' | 'boolean' | 'number' | 'array';
 
@@ -61,7 +61,7 @@ export interface Config {
   maxHelpDescLength?: number;
 
   /** CLI list of flag options */
-  options: Record<string, ArgumentOption>;
+  options: Record<string, FlagOption>;
 
   /** CLI or package version */
   version?: string;
