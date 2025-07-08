@@ -254,7 +254,8 @@ function printHelp(config: Config) {
   let longestOptNameLn = 0;
   let longestOptDescLn = 0;
   for (const [key, option] of Object.entries({ ...options, ...defaultOptions })) {
-    if ((key?.length ?? 0) > longestOptNameLn) {
+    const flagLn = (config.helpFlagCasing === 'camel' ? key : camelToKebab(key)).length;
+    if (flagLn > longestOptNameLn) {
       longestOptNameLn = key.length;
     }
     if ((option.describe?.length ?? 0) > longestOptDescLn) {
@@ -300,8 +301,9 @@ function printHelp(config: Config) {
       if (!version && key === 'version') {
         return;
       }
+      const flagName = config.helpFlagCasing === 'camel' ? key : camelToKebab(key);
       console.log(
-        `  ${aliasStr.padEnd(4)}--${formatHelpText(key, longestOptNameLn)}${formatHelpText(option.describe || '', longestOptDescLn)} ${formatOptionType(option.type, false, option.required)}`,
+        `  ${aliasStr.padEnd(4)}--${formatHelpText(flagName, longestOptNameLn)}${formatHelpText(option.describe || '', longestOptDescLn)} ${formatOptionType(option.type, false, option.required)}`,
       );
     });
   });

@@ -51,6 +51,12 @@ export interface Config {
   /** CLI definition */
   command: CommandOption;
 
+  /**
+   * Show flag option in which casing (camelCase or kebab-case) in the help (defaults to 'kebab').
+   * Note: this is only for the help print, the parsing will always support both camel/kebab casing
+   */
+  helpFlagCasing?: 'camel' | 'kebab';
+
   /** min description length shown in the help (defaults to 50) */
   minHelpDescLength?: number;
 

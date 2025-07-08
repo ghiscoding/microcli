@@ -105,6 +105,7 @@ const config: Config = {
     },
   },
   version: '0.1.6',
+  helpFlagCasing: 'camel',    // show help flag option in which text casing (camel or kebab) (defaults to 'kebab')
   minHelpDescLength: 40,  // min description length shown in help (defaults to 50)
   maxHelpDescLength: 120, // max description length shown in help (defaults to 100), will show ellipsis (...) when greater
 };
