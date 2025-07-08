@@ -70,6 +70,7 @@ const config = {
     },
   },
   version: '0.1.6',
+  // helpFlagCasing: 'camel',
   maxDescLength: 125, // max description length shown in help
 };
 

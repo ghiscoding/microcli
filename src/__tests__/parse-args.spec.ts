@@ -256,7 +256,7 @@ describe('parseArgs', () => {
           expect.stringContaining('  inFile          source files                                                    <string>'),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('  -d, --dryRun    Show what would be copied, but do not actually copy any files   [boolean]'),
+          expect.stringContaining('  -d, --dry-run   Show what would be copied, but do not actually copy any files   [boolean]'),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(
           expect.stringContaining('  -b, --bar       a required bar option                                           <string>'),
@@ -312,7 +312,7 @@ describe('parseArgs', () => {
       const configWithGroups: Config = {
         ...config,
         options: {
-          foo: {
+          fooBar: {
             alias: 'f',
             type: 'boolean',
             describe: 'foo option',
@@ -331,6 +331,7 @@ describe('parseArgs', () => {
             group: 'Group 2',
           },
         },
+        helpFlagCasing: 'camel',
       };
       const args = ['--help'];
       vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
@@ -339,7 +340,7 @@ describe('parseArgs', () => {
       } catch {
         expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('\nGroup 1:'));
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('  -f, --foo       foo option                                           [boolean]'),
+          expect.stringContaining('  -f, --fooBar    foo option                                           [boolean]'),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(
           expect.stringContaining('  -b, --bar       bar option                                           [boolean]'),
