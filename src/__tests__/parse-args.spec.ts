@@ -7,19 +7,17 @@ const config: Config = {
   command: {
     name: 'copyfiles',
     describe: 'Copy files from a source to a destination directory',
-    positionals: [
-      {
-        name: 'inFile',
+    positionals: {
+      inFile: {
         describe: 'source files',
         type: 'string',
         required: true,
       },
-      {
-        name: 'outDirectory',
+      outDirectory: {
         describe: 'destination directory',
         required: true,
       },
-    ],
+    },
   },
   options: {
     all: {
@@ -98,7 +96,6 @@ describe('parseArgs', () => {
       command: {
         name: 'test',
         describe: '',
-        positionals: [],
       },
       options: {
         fooBar: { type: 'boolean', alias: 'foo-bar', describe: '' },
@@ -290,7 +287,7 @@ describe('parseArgs', () => {
         },
         maxHelpDescLength: 60,
       };
-      config.command.positionals![0].variadic = true;
+      config.command.positionals!.inFile.variadic = true;
       const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
       const args = ['--help'];
       vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
@@ -304,7 +301,7 @@ describe('parseArgs', () => {
         expect(consoleLogSpy).toHaveBeenCalledWith(
           expect.stringContaining('  -l, --longdesc   This is a very long description that should be truncated wi... [boolean]'),
         );
-        delete config.command.positionals![0].variadic;
+        delete config.command.positionals!.inFile.variadic;
         done();
       }
     }));
@@ -437,20 +434,18 @@ describe('parseArgs', () => {
       command: {
         name: 'test',
         describe: 'Test optional variadic',
-        positionals: [
-          {
-            name: 'outDir',
+        positionals: {
+          outDir: {
             describe: 'output directory',
             required: true,
           },
-          {
-            name: 'inputs',
+          inputs: {
             describe: 'input files',
             type: 'string',
             variadic: true,
             required: false,
           },
-        ],
+        },
       },
       options: {},
       version: '1.0.0',
@@ -474,15 +469,14 @@ describe('parseArgs', () => {
       command: {
         name: 'test',
         describe: 'Test optional variadic',
-        positionals: [
-          {
-            name: 'inputs',
+        positionals: {
+          inputs: {
             describe: 'input files',
             type: 'string',
             variadic: true,
             required: true,
           },
-        ],
+        },
       },
       options: {},
       version: '1.0.0',
@@ -504,20 +498,18 @@ describe('parseArgs', () => {
       ...config,
       command: {
         ...config.command,
-        positionals: [
-          {
-            name: 'inFile',
+        positionals: {
+          inFile: {
             describe: 'source files',
             type: 'string',
             variadic: true,
             required: true,
           },
-          {
-            name: 'outDirectory',
+          outDirectory: {
             describe: 'destination directory',
             required: true,
           },
-        ],
+        },
       },
     };
     const spy = vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -656,19 +648,17 @@ describe('parseArgs', () => {
       ...config,
       command: {
         ...config.command,
-        positionals: [
-          {
-            name: 'inFile',
+        positionals: {
+          inFile: {
             describe: 'source files',
             type: 'string',
             required: false, // <-- optional positional
           },
-          {
-            name: 'outDirectory',
+          outDirectory: {
             describe: 'destination directory',
             required: true,
           },
-        ],
+        },
       },
     };
     const spy = vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -685,20 +675,18 @@ describe('parseArgs', () => {
       command: {
         name: 'test',
         describe: 'Test default positional',
-        positionals: [
-          {
-            name: 'outDir',
+        positionals: {
+          outDir: {
             describe: 'output directory',
             required: true,
           },
-          {
-            name: 'input',
+          input: {
             describe: 'input file',
             type: 'string',
             required: false,
             default: 'default.txt',
           },
-        ],
+        },
       },
       options: {},
       version: '1.0.0',
@@ -715,10 +703,10 @@ describe('parseArgs', () => {
       command: {
         name: 'badcli',
         describe: 'Invalid CLI',
-        positionals: [
-          { name: 'foo', describe: '', required: false },
-          { name: 'bar', describe: '', required: true },
-        ],
+        positionals: {
+          foo: { describe: '', required: false },
+          bar: { describe: '', required: true },
+        },
       },
       options: {},
       version: '1.0.0',
@@ -733,21 +721,19 @@ describe('parseArgs', () => {
       command: {
         name: 'test',
         describe: 'Test default variadic positional',
-        positionals: [
-          {
-            name: 'outDir',
+        positionals: {
+          outDir: {
             describe: 'output directory',
             required: true,
           },
-          {
-            name: 'inputs',
+          inputs: {
             describe: 'input files',
             type: 'string',
             variadic: true,
             required: false,
             default: ['default1.txt', 'default2.txt'],
           },
-        ],
+        },
       },
       options: {},
       version: '1.0.0',

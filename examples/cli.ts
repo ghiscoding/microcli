@@ -17,22 +17,20 @@ const config = {
   command: {
     name: 'serve',
     describe: 'Start a server with the given options',
-    positionals: [
-      {
-        name: 'input',
+    positionals: {
+      input: {
         describe: 'serving files or directory',
         type: 'string',
         variadic: true, // 1 or more
         required: true,
       },
-      {
-        name: 'port',
+      port: {
         type: 'number',
         describe: 'port to bind on',
         required: false,
         default: 5000, // optional default value
       },
-    ],
+    },
   },
   options: {
     dryRun: {
@@ -41,35 +39,49 @@ const config = {
       describe: 'Show what would be done, but do not actually start the server',
       default: false, // optional default value
     },
+    display: {
+      group: 'Advanced Options',
+      alias: 'D',
+      required: true,
+      type: 'boolean',
+      describe: 'a required display option',
+    },
     exclude: {
       alias: 'e',
       type: 'array',
       describe: 'pattern or glob to exclude (may be passed multiple times)',
-    },
-    rainbow: {
-      type: 'boolean',
-      alias: 'r',
-      describe: 'Enable rainbow mode',
-      default: true,
     },
     verbose: {
       alias: 'V',
       type: 'boolean',
       describe: 'print more information to console',
     },
-    up: {
-      type: 'number',
-      describe: 'slice a path off the bottom of the paths',
-      default: 1,
-    },
-    display: {
-      alias: 'D',
-      required: true,
+    open: {
+      alias: 'o',
       type: 'boolean',
-      describe: 'a required display option',
+      describe: 'open browser when starting server',
+      default: true,
+    },
+    cache: {
+      type: 'number',
+      describe: 'Set cache time (in seconds) for cache-control max-age header',
+      default: 3600,
+    },
+    address: {
+      type: 'string',
+      describe: 'Address to use',
+      required: true,
+    },
+    rainbow: {
+      group: 'Advanced Options',
+      type: 'boolean',
+      alias: 'r',
+      describe: 'Enable rainbow mode',
+      default: true,
     },
   },
-  version: readPackage().version,
+  version: readPackage(),
+  maxDescLength: 125, // max description length shown in help
 } as const;
 
 const args = parseArgs<typeof config>(config);
