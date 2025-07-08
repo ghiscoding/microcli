@@ -9,11 +9,11 @@
 
 ## cli-nano
 
-Simple library to create command-line tool (aka CLI) which is quite similar to [`Yargs`](https://github.com/yargs/yargs), it is as configurable as Yargs but is a fraction of its size. The library is also inspired by NodeJS `parseArgs()` but is again more configurable so that we really get what we would expect from a more complete CLI builder.
+Simple library to create command-line tool (aka CLI) which is quite similar to [`Yargs`](https://github.com/yargs/yargs), it is as configurable as Yargs but is a fraction of its size. The library is also inspired by NodeJS `parseArgs()` but is a lot more configurable so that we really get what we would expect from a more complete CLI builder.
 
 ### Features
 - Parses arguments
-- Supports defining Positional arguments 
+- Supports defining Positional (input) arguments
   - Supports Variadic args (1 or more positional args)
 - Automatically converts flags to camelCase to match config options
   - accepts both `--camelCase` and `--kebab-case`
@@ -22,7 +22,7 @@ Simple library to create command-line tool (aka CLI) which is quite similar to [
 - Outputs description and supplied help text by using `--help`
 - Supports defining `required` options
 - Supports `default` values
-- Supports `group` for grouping command options 
+- Supports `group` for grouping command options in help
 - No dependencies!
 
 ### Install
@@ -97,7 +97,7 @@ const config: Config = {
   },
   version: '0.1.6',
   minHelpDescLength: 40,  // min description length shown in help (defaults to 50)
-  maxHelpDescLength: 120, // max description length shown in help (defaults to 100)
+  maxHelpDescLength: 120, // max description length shown in help (defaults to 100), will show ellipsis (...) when greater
 };
 
 const args = parseArgs(config);
@@ -109,7 +109,7 @@ console.log(args);
 
 ### Usage with Type Inference
 
-For full TypeScript auto-inference and IntelliSense of parsed arguments, define your config as a `const` and use `as const`:
+For full TypeScript auto-inference and intelliSense of parsed arguments, define your config as a `const` and cast it `as const`:
 
 ```ts
 const config = {
@@ -127,10 +127,10 @@ args.display; // boolean (required)
 
 > **Tip:**  
 > Using `as const` preserves literal types and tuple information, so TypeScript can infer required/optional fields and argument types automatically.  
-> If you use `const config: Config = { ... }`, you get type checking but not full IntelliSense for parsed arguments.
+> If you use `const config: Config = { ... }`, you get type checking but not full intelliSense for parsed arguments.
 
 > [!NOTE]
-> For required+variadic positionals, the type is `[string, ...string[]]` (at least one value required). For optional variadic, it's string[]. For non-variadic, it's string.
+> For required+variadic positionals, the type is `[string, ...string[]]` (at least one value required). For optional variadic, it's `string[]`. For non-variadic, it's `string`.
 
 #### Example CLI Calls
 
@@ -147,13 +147,13 @@ serve dist/index.html
 # With required and optional positionals
 serve index1.html index2.html 8080 -D value
 
-# With boolean and array options
+# With boolean and array options entered as camelCase (kebab-case works too)
 serve index.html 7000 --dryRun --exclude pattern1 --exclude pattern2 -D value
 
-# With negated boolean
+# With negated boolean entered as kebab-case
 serve index.html 7000 --no-dryRun -D value
 
-# With short aliases
+# With short aliases (case sensitive)
 serve index.html 7000 -d -e pattern1 -e pattern2 -D value
 
 # With number option
@@ -162,7 +162,7 @@ serve index.html 7000 --up 2 -D value
 
 #### Notes
 
-- **Default values**: Use the `default` property in an option or positional argument to specify a value if the user does not provide one.
+- **Default values**: Use the `default` property in an option or positional argument to specify a value when the user does not provide one.
   - Example for option: `{ type: 'boolean', default: false }`
   - Example for positional: `{ name: 'port', type: 'number', default: 5000 }`
 - **Variadic positionals**: Use `variadic: true` for arguments that accept multiple values.
@@ -170,7 +170,7 @@ serve index.html 7000 --up 2 -D value
 - **Negated booleans**: Use `--no-flag` to set a boolean option to `false`.
 - **Array options**: Repeat the flag to collect multiple values (e.g., `--exclude a --exclude b`).
 - **Aliases**: Use `alias` for short flags (e.g., `-d` for `--dryRun`).
-- **Groups**: Use `group` for grouping some commands (e.g., `{ group: 'Extra Commands' }`).
+- **Groups**: Use `group` for grouping some commands in help (e.g., `{ group: 'Extra Commands' }`).
 
 See [examples/](examples/) for more usage patterns.
 
