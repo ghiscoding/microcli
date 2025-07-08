@@ -6,17 +6,17 @@ import type { Config } from '../interfaces.js';
 const config: Config = {
   command: {
     name: 'copyfiles',
-    description: 'Copy files from a source to a destination directory',
+    describe: 'Copy files from a source to a destination directory',
     positionals: [
       {
         name: 'inFile',
-        description: 'source files',
+        describe: 'source files',
         type: 'string',
         required: true,
       },
       {
         name: 'outDirectory',
-        description: 'destination directory',
+        describe: 'destination directory',
         required: true,
       },
     ],
@@ -25,26 +25,26 @@ const config: Config = {
     all: {
       alias: 'a',
       type: 'boolean',
-      description: 'include files & directories begining with a dot (.)',
+      describe: 'include files & directories begining with a dot (.)',
     },
     dryRun: {
       alias: 'd',
       type: 'boolean',
-      description: 'Show what would be copied, but do not actually copy any files',
+      describe: 'Show what would be copied, but do not actually copy any files',
     },
     exclude: {
       alias: 'e',
       type: 'array',
-      description: 'pattern or glob to exclude (may be passed multiple times)',
+      describe: 'pattern or glob to exclude (may be passed multiple times)',
     },
     up: {
       type: 'number',
-      description: 'slice a path off the bottom of the paths',
+      describe: 'slice a path off the bottom of the paths',
     },
     bar: {
       alias: 'b',
       required: true,
-      description: 'a required bar option',
+      describe: 'a required bar option',
     },
   },
   version: '0.1.6',
@@ -97,12 +97,12 @@ describe('parseArgs', () => {
     const config = {
       command: {
         name: 'test',
-        description: '',
+        describe: '',
         positionals: [],
       },
       options: {
-        fooBar: { type: 'boolean', alias: 'foo-bar', description: '' },
-        bazQux: { type: 'boolean', alias: 'bazQux', description: '' },
+        fooBar: { type: 'boolean', alias: 'foo-bar', describe: '' },
+        bazQux: { type: 'boolean', alias: 'bazQux', describe: '' },
       },
       version: '1.0.0',
     } as const;
@@ -234,8 +234,8 @@ describe('parseArgs', () => {
     const configWithDupAlias: Config = {
       ...config,
       options: {
-        foo: { alias: 'x', type: 'boolean', description: '' },
-        bar: { alias: 'x', type: 'boolean', description: '' },
+        foo: { alias: 'x', type: 'boolean', describe: '' },
+        bar: { alias: 'x', type: 'boolean', describe: '' },
       },
     };
     expect(() => parseArgs(configWithDupAlias)).toThrow('Duplicate alias detected: "x" used for both "foo" and "bar"');
@@ -285,7 +285,7 @@ describe('parseArgs', () => {
           longdesc: {
             alias: 'l',
             type: 'boolean',
-            description: longDesc,
+            describe: longDesc,
           },
         },
         maxHelpDescLength: 60,
@@ -318,19 +318,19 @@ describe('parseArgs', () => {
           foo: {
             alias: 'f',
             type: 'boolean',
-            description: 'foo option',
+            describe: 'foo option',
             group: 'Group 1',
           },
           bar: {
             alias: 'b',
             type: 'boolean',
-            description: 'bar option',
+            describe: 'bar option',
             group: 'Group 1',
           },
           baz: {
             alias: 'z',
             type: 'boolean',
-            description: 'baz option',
+            describe: 'baz option',
             group: 'Group 2',
           },
         },
@@ -364,13 +364,13 @@ describe('parseArgs', () => {
           foo: {
             alias: 'f',
             type: 'boolean',
-            description: 'foo option',
+            describe: 'foo option',
             group: 'Group 1',
           },
           bar: {
             alias: 'b',
             type: 'boolean',
-            description: 'bar option',
+            describe: 'bar option',
           },
         },
       };
@@ -400,7 +400,7 @@ describe('parseArgs', () => {
           foo: {
             alias: 'f',
             type: 'boolean',
-            description: 'foo option',
+            describe: 'foo option',
             group: '',
           },
         },
@@ -436,16 +436,16 @@ describe('parseArgs', () => {
     const config: Config = {
       command: {
         name: 'test',
-        description: 'Test optional variadic',
+        describe: 'Test optional variadic',
         positionals: [
           {
             name: 'outDir',
-            description: 'output directory',
+            describe: 'output directory',
             required: true,
           },
           {
             name: 'inputs',
-            description: 'input files',
+            describe: 'input files',
             type: 'string',
             variadic: true,
             required: false,
@@ -473,11 +473,11 @@ describe('parseArgs', () => {
     const config: Config = {
       command: {
         name: 'test',
-        description: 'Test optional variadic',
+        describe: 'Test optional variadic',
         positionals: [
           {
             name: 'inputs',
-            description: 'input files',
+            describe: 'input files',
             type: 'string',
             variadic: true,
             required: true,
@@ -507,14 +507,14 @@ describe('parseArgs', () => {
         positionals: [
           {
             name: 'inFile',
-            description: 'source files',
+            describe: 'source files',
             type: 'string',
             variadic: true,
             required: true,
           },
           {
             name: 'outDirectory',
-            description: 'destination directory',
+            describe: 'destination directory',
             required: true,
           },
         ],
@@ -537,7 +537,7 @@ describe('parseArgs', () => {
       },
       options: {
         file: {
-          description: 'source files',
+          describe: 'source files',
           type: 'string',
         },
       },
@@ -558,14 +558,14 @@ describe('parseArgs', () => {
     const config: Config = {
       command: {
         name: 'test',
-        description: 'Test required flag',
+        describe: 'Test required flag',
       },
       options: {
         force: {
           alias: 'f',
           type: 'boolean',
           required: true,
-          description: 'Force operation',
+          describe: 'Force operation',
         },
       },
       version: '1.0.0',
@@ -583,7 +583,7 @@ describe('parseArgs', () => {
         testOption: {
           alias: 'testAliasCamel',
           type: 'boolean',
-          description: 'A test option with camelCase alias',
+          describe: 'A test option with camelCase alias',
         },
       },
     };
@@ -601,7 +601,7 @@ describe('parseArgs', () => {
         testOption: {
           alias: 'test-alias-kebab',
           type: 'boolean',
-          description: 'A test option with kebab-case alias',
+          describe: 'A test option with kebab-case alias',
         },
       },
     };
@@ -642,7 +642,7 @@ describe('parseArgs', () => {
         ...config.options,
         noAliasOpt: {
           type: 'boolean',
-          description: 'Option with no alias',
+          describe: 'Option with no alias',
         },
       },
     };
@@ -659,13 +659,13 @@ describe('parseArgs', () => {
         positionals: [
           {
             name: 'inFile',
-            description: 'source files',
+            describe: 'source files',
             type: 'string',
             required: false, // <-- optional positional
           },
           {
             name: 'outDirectory',
-            description: 'destination directory',
+            describe: 'destination directory',
             required: true,
           },
         ],
@@ -684,16 +684,16 @@ describe('parseArgs', () => {
     const configWithDefaultPositional: Config = {
       command: {
         name: 'test',
-        description: 'Test default positional',
+        describe: 'Test default positional',
         positionals: [
           {
             name: 'outDir',
-            description: 'output directory',
+            describe: 'output directory',
             required: true,
           },
           {
             name: 'input',
-            description: 'input file',
+            describe: 'input file',
             type: 'string',
             required: false,
             default: 'default.txt',
@@ -714,10 +714,10 @@ describe('parseArgs', () => {
     const configInvalid: Config = {
       command: {
         name: 'badcli',
-        description: 'Invalid CLI',
+        describe: 'Invalid CLI',
         positionals: [
-          { name: 'foo', description: '', required: false },
-          { name: 'bar', description: '', required: true },
+          { name: 'foo', describe: '', required: false },
+          { name: 'bar', describe: '', required: true },
         ],
       },
       options: {},
@@ -732,16 +732,16 @@ describe('parseArgs', () => {
     const configWithDefaultVariadic: Config = {
       command: {
         name: 'test',
-        description: 'Test default variadic positional',
+        describe: 'Test default variadic positional',
         positionals: [
           {
             name: 'outDir',
-            description: 'output directory',
+            describe: 'output directory',
             required: true,
           },
           {
             name: 'inputs',
-            description: 'input files',
+            describe: 'input files',
             type: 'string',
             variadic: true,
             required: false,
@@ -767,13 +767,13 @@ describe('parseArgs', () => {
         file: {
           alias: 'f',
           type: 'string',
-          description: 'File path',
+          describe: 'File path',
           default: '/etc/passwd',
         },
         bar: {
           alias: 'b',
           required: true,
-          description: 'a required bar option',
+          describe: 'a required bar option',
         },
       },
     };
@@ -791,13 +791,13 @@ describe('parseArgs', () => {
         verbose: {
           alias: 'V',
           type: 'boolean',
-          description: 'Print more information',
+          describe: 'Print more information',
           default: true,
         },
         bar: {
           alias: 'b',
           required: true,
-          description: 'a required bar option',
+          describe: 'a required bar option',
         },
       },
     };
@@ -815,13 +815,13 @@ describe('parseArgs', () => {
         follow: {
           alias: 'F',
           type: 'boolean',
-          description: 'Follow symbolic links',
+          describe: 'Follow symbolic links',
           default: true,
         },
         bar: {
           alias: 'b',
           required: true,
-          description: 'a required bar option',
+          describe: 'a required bar option',
         },
       },
     };
@@ -839,13 +839,13 @@ describe('parseArgs', () => {
         file: {
           alias: 'f',
           type: 'string',
-          description: 'File path',
+          describe: 'File path',
           default: '/etc/passwd',
         },
         bar: {
           alias: 'b',
           required: true,
-          description: 'a required bar option',
+          describe: 'a required bar option',
         },
       },
     };
@@ -862,13 +862,13 @@ describe('parseArgs', () => {
         ...config.options,
         up: {
           type: 'number',
-          description: 'slice a path off the bottom of the paths',
+          describe: 'slice a path off the bottom of the paths',
           default: 5,
         },
         bar: {
           alias: 'b',
           required: true,
-          description: 'a required bar option',
+          describe: 'a required bar option',
         },
       },
     };
@@ -886,13 +886,13 @@ describe('parseArgs', () => {
         exclude: {
           alias: 'e',
           type: 'array',
-          description: 'pattern or glob to exclude',
+          describe: 'pattern or glob to exclude',
           default: ['node_modules', 'dist'],
         },
         bar: {
           alias: 'b',
           required: true,
-          description: 'a required bar option',
+          describe: 'a required bar option',
         },
       },
     };
@@ -910,13 +910,13 @@ describe('parseArgs', () => {
         follow: {
           alias: 'F',
           type: 'boolean',
-          description: 'Follow symbolic links',
+          describe: 'Follow symbolic links',
           default: false,
         },
         bar: {
           alias: 'b',
           required: true,
-          description: 'a required bar option',
+          describe: 'a required bar option',
         },
       },
     };

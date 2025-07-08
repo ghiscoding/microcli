@@ -2,8 +2,8 @@ export interface FlagOption {
   /** option type */
   type?: 'string' | 'boolean' | 'number' | 'array';
 
-  /** description of the flag option */
-  description: string;
+  /** describe the flag option */
+  describe: string;
 
   /** defaults to undefined, provide shorter alias as command options */
   alias?: string;
@@ -22,8 +22,8 @@ export interface PositionalArgument {
   /** positional argument name (it will be displayed in the help docs) */
   name: string;
 
-  /** positional argument description */
-  description: string;
+  /** describe positional argument */
+  describe: string;
 
   /** postional argument type */
   type?: 'string' | 'boolean' | 'number' | 'array';
@@ -42,8 +42,8 @@ export interface CommandOption {
   /** command name, used in the help docs */
   name: string;
 
-  /** command description */
-  description: string;
+  /** describe command */
+  describe: string;
 
   /** list of positional arguments */
   positionals?: readonly PositionalArgument[];
