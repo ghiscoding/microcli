@@ -16,11 +16,11 @@ function readPackage() {
 const config = {
   command: {
     name: 'serve',
-    description: 'Start a server with the given options',
+    describe: 'Start a server with the given options',
     positionals: [
       {
         name: 'input',
-        description: 'serving files or directory',
+        describe: 'serving files or directory',
         type: 'string',
         variadic: true, // 1 or more
         required: true,
@@ -28,7 +28,7 @@ const config = {
       {
         name: 'port',
         type: 'number',
-        description: 'port to bind on',
+        describe: 'port to bind on',
         required: false,
         default: 5000, // optional default value
       },
@@ -38,35 +38,35 @@ const config = {
     dryRun: {
       alias: 'd',
       type: 'boolean',
-      description: 'Show what would be done, but do not actually start the server',
+      describe: 'Show what would be done, but do not actually start the server',
       default: false, // optional default value
     },
     exclude: {
       alias: 'e',
       type: 'array',
-      description: 'pattern or glob to exclude (may be passed multiple times)',
+      describe: 'pattern or glob to exclude (may be passed multiple times)',
     },
     rainbow: {
       type: 'boolean',
       alias: 'r',
-      description: 'Enable rainbow mode',
+      describe: 'Enable rainbow mode',
       default: true,
     },
     verbose: {
       alias: 'V',
       type: 'boolean',
-      description: 'print more information to console',
+      describe: 'print more information to console',
     },
     up: {
       type: 'number',
-      description: 'slice a path off the bottom of the paths',
+      describe: 'slice a path off the bottom of the paths',
       default: 1,
     },
     display: {
       alias: 'D',
       required: true,
       type: 'boolean',
-      description: 'a required display option',
+      describe: 'a required display option',
     },
   },
   version: readPackage().version,

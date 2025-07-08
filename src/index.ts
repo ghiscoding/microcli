@@ -3,8 +3,8 @@ import type { ArgsResult, Config, FlagOption } from './interfaces.js';
 export type * from './interfaces.js';
 
 const defaultOptions: Record<string, FlagOption> = {
-  help: { alias: 'h', description: 'Show help', type: 'boolean' },
-  version: { alias: 'v', description: 'Show version number', type: 'boolean' },
+  help: { alias: 'h', describe: 'Show help', type: 'boolean' },
+  version: { alias: 'v', describe: 'Show version number', type: 'boolean' },
 };
 
 export function parseArgs<C extends Config>(config: C): ArgsResult<C> {
@@ -248,7 +248,7 @@ function printHelp(config: Config) {
   const usagePositionals = buildUsagePositionals(command.positionals);
 
   console.log('Usage:');
-  console.log(`  ${command.name} ${usagePositionals} [options]  ${command.description}`);
+  console.log(`  ${command.name} ${usagePositionals} [options]  ${command.describe}`);
 
   // calculate longest description length
   let longestOptNameLn = 0;
@@ -257,8 +257,8 @@ function printHelp(config: Config) {
     if ((key?.length ?? 0) > longestOptNameLn) {
       longestOptNameLn = key.length;
     }
-    if ((option.description?.length ?? 0) > longestOptDescLn) {
-      longestOptDescLn = option.description.length;
+    if ((option.describe?.length ?? 0) > longestOptDescLn) {
+      longestOptDescLn = option.describe.length;
     }
   }
 
@@ -276,7 +276,7 @@ function printHelp(config: Config) {
   console.log('\nArguments:');
   command.positionals?.forEach(arg => {
     console.log(
-      `  ${formatHelpText(arg.name, longestOptNameLn + 6)}${formatHelpText(arg.description, longestOptDescLn)} ${formatOptionType(arg.type, arg.variadic, arg.required)}`,
+      `  ${formatHelpText(arg.name, longestOptNameLn + 6)}${formatHelpText(arg.describe, longestOptDescLn)} ${formatOptionType(arg.type, arg.variadic, arg.required)}`,
     );
   });
 
@@ -301,7 +301,7 @@ function printHelp(config: Config) {
         return;
       }
       console.log(
-        `  ${aliasStr.padEnd(4)}--${formatHelpText(key, longestOptNameLn)}${formatHelpText(option.description || '', longestOptDescLn)} ${formatOptionType(option.type, false, option.required)}`,
+        `  ${aliasStr.padEnd(4)}--${formatHelpText(key, longestOptNameLn)}${formatHelpText(option.describe || '', longestOptDescLn)} ${formatOptionType(option.type, false, option.required)}`,
       );
     });
   });
