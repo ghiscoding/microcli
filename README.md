@@ -183,7 +183,7 @@ See [examples/](examples/) for more usage patterns.
 
 ## Help Example
 
-You can see below an example of a CLI help (which is the result of calling `--help` with the config shown avove). 
+You can see below an example of a CLI help (which is the result of calling `--help` with the usage config shown above). 
 
 Please note:
 
