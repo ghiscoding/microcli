@@ -1,8 +1,8 @@
-import type { ArgsResult, ArgumentOptions, Config } from './interfaces.js';
+import type { ArgsResult, ArgumentOption, Config } from './interfaces.js';
 
 export type * from './interfaces.js';
 
-const defaultOptions: Record<string, ArgumentOptions> = {
+const defaultOptions: Record<string, ArgumentOption> = {
   help: { alias: 'h', description: 'Show help', type: 'boolean' },
   version: { alias: 'v', description: 'Show version number', type: 'boolean' },
 };
@@ -117,7 +117,7 @@ export function parseArgs<C extends Config>(config: C): ArgsResult<C> {
     }
     const argOrg = args[argIndex] || '';
     let arg = argOrg;
-    let option: ArgumentOptions | undefined;
+    let option: ArgumentOption | undefined;
     let configKey: string | undefined;
 
     if (argOrg.startsWith('-')) {
@@ -225,7 +225,7 @@ function formatOptionType(type: string | undefined, variadic?: boolean, required
 }
 
 /** Helper to find an option and its config key by argument name or alias. */
-function findOption(options: Record<string, ArgumentOptions>, arg: string): [ArgumentOptions | undefined, string | undefined] {
+function findOption(options: Record<string, ArgumentOption>, arg: string): [ArgumentOption | undefined, string | undefined] {
   // Try all forms: as-is, kebab-to-camel, camel-to-kebab
   const option = options[arg] || options[kebabToCamel(arg)] || options[camelToKebab(arg).replace(/-/g, '')];
   if (option) {
@@ -280,16 +280,31 @@ function printHelp(config: Config) {
     );
   });
 
-  console.log('\nOptions:');
-  for (const [key, option] of Object.entries({ ...options, ...defaultOptions })) {
-    const aliasStr = option.alias ? `-${option.alias}, ` : '';
-    if (!version && key === 'version') {
-      continue;
-    }
-    console.log(
-      `  ${aliasStr.padEnd(4)}--${formatHelpText(key, longestOptNameLn)}${formatHelpText(option.description || '', longestOptDescLn)} ${formatOptionType(option.type, false, option.required)}`,
-    );
-  }
+  // Group options by their group property
+  const groupedOptions = Object.entries({ ...options, ...defaultOptions }).reduce(
+    (acc, [key, option]) => {
+      const group = option.group || 'Options';
+      if (!acc[group]) {
+        acc[group] = [];
+      }
+      acc[group].push([key, option]);
+      return acc;
+    },
+    {} as Record<string, [string, ArgumentOption][]>,
+  );
+
+  Object.keys(groupedOptions).forEach(group => {
+    console.log(`\n${group}:`);
+    groupedOptions[group].forEach(([key, option]) => {
+      const aliasStr = option.alias ? `-${option.alias}, ` : '';
+      if (!version && key === 'version') {
+        return;
+      }
+      console.log(
+        `  ${aliasStr.padEnd(4)}--${formatHelpText(key, longestOptNameLn)}${formatHelpText(option.description || '', longestOptDescLn)} ${formatOptionType(option.type, false, option.required)}`,
+      );
+    });
+  });
 }
 
 /** Utility to convert kebab-case to camelCase */

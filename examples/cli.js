@@ -35,12 +35,6 @@ const config = {
       type: 'array',
       description: 'pattern or glob to exclude (may be passed multiple times)',
     },
-    rainbow: {
-      type: 'boolean',
-      alias: 'r',
-      description: 'Enable rainbow mode',
-      default: true,
-    },
     verbose: {
       alias: 'V',
       type: 'boolean',
@@ -52,10 +46,18 @@ const config = {
       default: 1,
     },
     display: {
+      // group: 'Other Options',
       alias: 'D',
       required: true,
       type: 'boolean',
       description: 'a required display option',
+    },
+    rainbow: {
+      // group: 'Other Options',
+      type: 'boolean',
+      alias: 'r',
+      description: 'Enable rainbow mode',
+      default: true,
     },
   },
   version: '0.1.6',

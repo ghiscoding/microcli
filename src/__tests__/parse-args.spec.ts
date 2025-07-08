@@ -309,6 +309,115 @@ describe('parseArgs', () => {
       }
     }));
 
+  it('should group options by their group property', () =>
+    new Promise((done: any) => {
+      const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      const configWithGroups: Config = {
+        ...config,
+        options: {
+          foo: {
+            alias: 'f',
+            type: 'boolean',
+            description: 'foo option',
+            group: 'Group 1',
+          },
+          bar: {
+            alias: 'b',
+            type: 'boolean',
+            description: 'bar option',
+            group: 'Group 1',
+          },
+          baz: {
+            alias: 'z',
+            type: 'boolean',
+            description: 'baz option',
+            group: 'Group 2',
+          },
+        },
+      };
+      const args = ['--help'];
+      vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
+      try {
+        parseArgs(configWithGroups);
+      } catch {
+        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('\nGroup 1:'));
+        expect(consoleLogSpy).toHaveBeenCalledWith(
+          expect.stringContaining('  -f, --foo       foo option                                           [boolean]'),
+        );
+        expect(consoleLogSpy).toHaveBeenCalledWith(
+          expect.stringContaining('  -b, --bar       bar option                                           [boolean]'),
+        );
+        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('\nGroup 2:'));
+        expect(consoleLogSpy).toHaveBeenCalledWith(
+          expect.stringContaining('  -z, --baz       baz option                                           [boolean]'),
+        );
+        done();
+      }
+    }));
+
+  it('should handle options without a group property', () =>
+    new Promise((done: any) => {
+      const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      const configWithGroups: Config = {
+        ...config,
+        options: {
+          foo: {
+            alias: 'f',
+            type: 'boolean',
+            description: 'foo option',
+            group: 'Group 1',
+          },
+          bar: {
+            alias: 'b',
+            type: 'boolean',
+            description: 'bar option',
+          },
+        },
+      };
+      const args = ['--help'];
+      vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
+      try {
+        parseArgs(configWithGroups);
+      } catch {
+        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('\nGroup 1:'));
+        expect(consoleLogSpy).toHaveBeenCalledWith(
+          expect.stringContaining('  -f, --foo       foo option                                           [boolean]'),
+        );
+        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('\nOptions:'));
+        expect(consoleLogSpy).toHaveBeenCalledWith(
+          expect.stringContaining('  -b, --bar       bar option                                           [boolean]'),
+        );
+        done();
+      }
+    }));
+
+  it('should handle empty groups', () =>
+    new Promise((done: any) => {
+      const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      const configWithEmptyGroup: Config = {
+        ...config,
+        options: {
+          foo: {
+            alias: 'f',
+            type: 'boolean',
+            description: 'foo option',
+            group: '',
+          },
+        },
+      };
+      const args = ['--help'];
+      vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', ...args]);
+      try {
+        parseArgs(configWithEmptyGroup);
+      } catch {
+        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('\nOptions:'));
+        expect(consoleLogSpy).toHaveBeenCalledWith(
+          expect.stringContaining('  -f, --foo       foo option                                           [boolean]'),
+        );
+        done();
+      }
+    }));
+
   it('should handle version command', () =>
     new Promise((done: any) => {
       const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});

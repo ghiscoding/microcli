@@ -1,4 +1,4 @@
-export interface ArgumentOptions {
+export interface ArgumentOption {
   /** option type */
   type?: 'string' | 'boolean' | 'number' | 'array';
 
@@ -10,6 +10,9 @@ export interface ArgumentOptions {
 
   /** default value for the option if not provided */
   default?: any;
+
+  /** optional group for grouping some commands */
+  group?: string;
 
   /** defaults to false, is the option required? */
   required?: boolean;
@@ -35,7 +38,7 @@ export interface PositionalArgument {
   required?: boolean;
 }
 
-export interface CommandOptions {
+export interface CommandOption {
   /** command name, used in the help docs */
   name: string;
 
@@ -49,7 +52,7 @@ export interface CommandOptions {
 /** CLI options */
 export interface Config {
   /** CLI definition */
-  command: CommandOptions;
+  command: CommandOption;
 
   /** min description length shown in the help (defaults to 50) */
   minHelpDescLength?: number;
@@ -58,7 +61,7 @@ export interface Config {
   maxHelpDescLength?: number;
 
   /** CLI list of flag options */
-  options: Record<string, ArgumentOptions>;
+  options: Record<string, ArgumentOption>;
 
   /** CLI or package version */
   version?: string;
