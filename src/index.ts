@@ -244,15 +244,39 @@ function findOption(options: Record<string, ArgumentOptions>, arg: string): [Arg
 
 /** Print CLI help documentation to the screen */
 function printHelp(config: Config) {
-  const { command, options, version, helpOptLength = 20, helpDescLength = 65 } = config;
+  const { command, options, version, minHelpDescLength = 50, maxHelpDescLength = 100 } = config;
   const usagePositionals = buildUsagePositionals(command.positionals);
 
   console.log('Usage:');
   console.log(`  ${command.name} ${usagePositionals} [options]  ${command.description}`);
+
+  // calculate longest description length
+  let longestOptNameLn = 0;
+  let longestOptDescLn = 0;
+  for (const [key, option] of Object.entries({ ...options, ...defaultOptions })) {
+    if ((key?.length ?? 0) > longestOptNameLn) {
+      longestOptNameLn = key.length;
+    }
+    if ((option.description?.length ?? 0) > longestOptDescLn) {
+      longestOptDescLn = option.description.length;
+    }
+  }
+
+  // make sure the length to use is between our defined min/max
+  if (longestOptDescLn < minHelpDescLength) {
+    longestOptDescLn = minHelpDescLength;
+  } else if (longestOptDescLn > maxHelpDescLength) {
+    longestOptDescLn = maxHelpDescLength;
+  }
+
+  // reserve some extra spaces between option name/desc
+  longestOptDescLn += 2;
+  longestOptNameLn += 3;
+
   console.log('\nArguments:');
   command.positionals?.forEach(arg => {
     console.log(
-      `  ${formatHelpText(arg.name, helpOptLength)}${formatHelpText(arg.description, helpDescLength)} ${formatOptionType(arg.type, arg.variadic, arg.required)}`,
+      `  ${formatHelpText(arg.name, longestOptNameLn + 6)}${formatHelpText(arg.description, longestOptDescLn)} ${formatOptionType(arg.type, arg.variadic, arg.required)}`,
     );
   });
 
@@ -263,7 +287,7 @@ function printHelp(config: Config) {
       continue;
     }
     console.log(
-      `  ${aliasStr.padEnd(4)}--${formatHelpText(key, helpOptLength - 6)}${formatHelpText(option.description || '', helpDescLength)} ${formatOptionType(option.type, false, option.required)}`,
+      `  ${aliasStr.padEnd(4)}--${formatHelpText(key, longestOptNameLn)}${formatHelpText(option.description || '', longestOptDescLn)} ${formatOptionType(option.type, false, option.required)}`,
     );
   }
 }

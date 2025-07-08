@@ -51,11 +51,11 @@ export interface Config {
   /** CLI definition */
   command: CommandOptions;
 
-  /** option name length (w/wo alias) shown in the help (defaults to 20) */
-  helpOptLength?: number;
+  /** min description length shown in the help (defaults to 50) */
+  minHelpDescLength?: number;
 
-  /** description length shown in the help (defaults to 65) */
-  helpDescLength?: number;
+  /** max description length shown in the help (defaults to 100) */
+  maxHelpDescLength?: number;
 
   /** CLI list of flag options */
   options: Record<string, ArgumentOptions>;
