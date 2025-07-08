@@ -22,6 +22,7 @@ Simple library to create command-line tool (aka CLI) which is quite similar to [
 - Outputs description and supplied help text by using `--help`
 - Supports defining `required` options
 - Supports `default` values
+- Supports `group` for grouping command options 
 - No dependencies!
 
 ### Install
@@ -69,12 +70,6 @@ const config: Config = {
       type: 'array',
       description: 'pattern or glob to exclude (may be passed multiple times)',
     },
-    rainbow: {
-      type: 'boolean',
-      alias: 'r',
-      description: 'Enable rainbow mode',
-      default: true,
-    },
     verbose: {
       alias: 'V',
       type: 'boolean',
@@ -86,11 +81,19 @@ const config: Config = {
       default: 1,
     },
     display: {
+      // group: 'Extra Options',
       alias: 'D',
       required: true,
       type: 'boolean',
       description: 'a required display option',
-    }
+    },
+    rainbow: {
+      // group: 'Extra Options',
+      type: 'boolean',
+      alias: 'r',
+      description: 'Enable rainbow mode',
+      default: true,
+    },
   },
   version: '0.1.6',
   minHelpDescLength: 40,  // min description length shown in help (defaults to 50)
@@ -167,6 +170,7 @@ serve index.html 7000 --up 2 -D value
 - **Negated booleans**: Use `--no-flag` to set a boolean option to `false`.
 - **Array options**: Repeat the flag to collect multiple values (e.g., `--exclude a --exclude b`).
 - **Aliases**: Use `alias` for short flags (e.g., `-d` for `--dryRun`).
+- **Groups**: Use `group` for grouping some commands (e.g., `{ group: 'Extra Commands' }`).
 
 See [examples/](examples/) for more usage patterns.
 
