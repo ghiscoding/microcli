@@ -41,22 +41,20 @@ const config: Config = {
   command: {
     name: 'serve',
     describe: 'Start a server with the given options',
-    positionals: [
-      {
-        name: 'input',
+    positionals: {
+      input: {
         describe: 'serving files or directory',
         type: 'string',
         variadic: true, // 1 or more
         required: true,
       },
-      {
-        name: 'port',
+      port: {
         type: 'number',
         describe: 'port to bind on',
         required: false,
         default: 5000, // optional default value
-      },      
-    ],
+      },
+    },
   },
   options: {
     dryRun: {
@@ -64,6 +62,13 @@ const config: Config = {
       type: 'boolean',
       describe: 'Show what would be done, but do not actually start the server',
       default: false, // optional default value
+    },
+    display: {
+      group: 'Advanced Options',
+      alias: 'D',
+      required: true,
+      type: 'boolean',
+      describe: 'a required display option',
     },
     exclude: {
       alias: 'e',
@@ -75,20 +80,24 @@ const config: Config = {
       type: 'boolean',
       describe: 'print more information to console',
     },
-    up: {
-      type: 'number',
-      describe: 'slice a path off the bottom of the paths',
-      default: 1,
-    },
-    display: {
-      // group: 'Extra Options',
-      alias: 'D',
-      required: true,
+    open: {
+      alias: 'o',
       type: 'boolean',
-      describe: 'a required display option',
+      describe: 'open browser when starting server',
+      default: true,
+    },
+    cache: {
+      type: 'number',
+      describe: 'Set cache time (in seconds) for cache-control max-age header',
+      default: 3600,
+    },
+    address: {
+      type: 'string',
+      describe: 'Address to use',
+      required: true,
     },
     rainbow: {
-      // group: 'Extra Options',
+      group: 'Advanced Options',
       type: 'boolean',
       alias: 'r',
       describe: 'Enable rainbow mode',
@@ -201,10 +210,14 @@ Arguments:
 Options:
   -d, --dryRun    Show what would be done, but do not actually start the server   [boolean]
   -e, --exclude   pattern or glob to exclude (may be passed multiple times)       [array]
-  -r, --rainbow   Enable rainbow mode                                             [boolean]
   -V, --verbose   print more information to console                               [boolean]
-      --up        slice a path off the bottom of the paths                        [number]
-  -D, --display   a required display option                                       <boolean>
+  -o, --open      open browser when starting server                               [boolean]
+      --cache     Set cache time (in seconds) for cache-control max-age header    [number]
+      --address   Address to use                                                  <string>
   -h, --help      Show help                                                       [boolean]
   -v, --version   Show version number                                             [boolean]
+
+Advanced Options:
+  -D, --display   a required display option                                       <boolean>
+  -r, --rainbow   Enable rainbow mode                                             [boolean]
 ```
