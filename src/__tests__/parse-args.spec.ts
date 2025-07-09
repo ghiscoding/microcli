@@ -285,7 +285,7 @@ describe('parseArgs', () => {
             describe: longDesc,
           },
         },
-        maxHelpDescLength: 60,
+        helpDescMaxLength: 60,
       };
       config.command.positionals!.inFile.variadic = true;
       const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});

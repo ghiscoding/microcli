@@ -69,10 +69,10 @@ export interface Config {
   helpFlagCasing?: 'camel' | 'kebab';
 
   /** min description length shown in the help (defaults to 50) */
-  minHelpDescLength?: number;
+  helpDescMinLength?: number;
 
   /** max description length shown in the help (defaults to 100) */
-  maxHelpDescLength?: number;
+  helpDescMaxLength?: number;
 
   /** CLI list of flag options */
   options: Record<string, FlagOption>;

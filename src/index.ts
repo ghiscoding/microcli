@@ -244,7 +244,7 @@ function findOption(options: Record<string, FlagOption>, arg: string): [FlagOpti
 
 /** Print CLI help documentation to the screen */
 function printHelp(config: Config) {
-  const { command, options, version, minHelpDescLength = 50, maxHelpDescLength = 100 } = config;
+  const { command, options, version, helpDescMinLength = 50, helpDescMaxLength = 100 } = config;
   const usagePositionals = buildUsagePositionals(command.positionals);
 
   console.log('Usage:');
@@ -272,10 +272,10 @@ function printHelp(config: Config) {
   }
 
   // make sure the length to use is between our defined min/max
-  if (longestOptDescLn < minHelpDescLength) {
-    longestOptDescLn = minHelpDescLength;
-  } else if (longestOptDescLn > maxHelpDescLength) {
-    longestOptDescLn = maxHelpDescLength;
+  if (longestOptDescLn < helpDescMinLength) {
+    longestOptDescLn = helpDescMinLength;
+  } else if (longestOptDescLn > helpDescMaxLength) {
+    longestOptDescLn = helpDescMaxLength;
   }
 
   // reserve some extra spaces between option name/desc
