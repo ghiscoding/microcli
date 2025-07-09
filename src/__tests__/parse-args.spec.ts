@@ -249,7 +249,7 @@ describe('parseArgs', () => {
         expect(error.message).toBe('process.exit unexpectedly called with "0"');
         expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Usage:'));
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('copyfiles <inFile> <outDirectory> [options]  Copy files from a source to a destination directory'),
+          expect.stringContaining('copyfiles <inFile> <outDirectory> [options]   Copy files from a source to a destination directory'),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('\nArguments:'));
         expect(consoleLogSpy).toHaveBeenCalledWith(
@@ -521,6 +521,41 @@ describe('parseArgs', () => {
     expect(spy).toHaveBeenCalledWith(expect.stringContaining('<inFile..>'));
     spy.mockRestore();
   });
+
+  it('should print examples when provided', () =>
+    new Promise((done: any) => {
+      const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      const configWithExample: Config = {
+        ...config,
+        command: {
+          ...config.command,
+          examples: [{ cmd: '$0 ./www/index.html 8080 --open', describe: 'Start web server on port 8080 and open browser' }],
+          positionals: {
+            inFile: {
+              describe: 'source files',
+              type: 'string',
+              variadic: true,
+              required: true,
+            },
+            outDirectory: {
+              describe: 'destination directory',
+              required: true,
+            },
+          },
+        },
+      };
+      vi.spyOn(process, 'argv', 'get').mockReturnValue(['node', 'cli.js', '--help']);
+      try {
+        parseArgs(configWithExample);
+      } catch {
+        // The truncated string should end with '...'
+        expect(consoleLogSpy).toHaveBeenCalledWith('\nExamples:');
+        expect(consoleLogSpy).toHaveBeenCalledWith(
+          expect.stringContaining('  copyfiles ./www/index.html 8080 --open   Start web server on port 8080 and open browser'),
+        );
+        done();
+      }
+    }));
 
   it('should print usage without any positional argument defined', () => {
     const configWithoutPositional: Config = {

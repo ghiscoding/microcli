@@ -42,8 +42,19 @@ export interface CommandOption {
   /** describe command */
   describe: string;
 
+  /** give some example invocations of your program */
+  examples?: readonly ExampleOption[];
+
   /** list of positional arguments */
   positionals?: Record<string, PositionalArgument>;
+}
+
+export interface ExampleOption {
+  /** script example command, the string `$0` will get interpolated to the current script name or node command */
+  cmd: string;
+
+  /** describe what the script command does */
+  describe: string;
 }
 
 /** CLI options */

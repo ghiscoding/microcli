@@ -248,7 +248,15 @@ function printHelp(config: Config) {
   const usagePositionals = buildUsagePositionals(command.positionals);
 
   console.log('Usage:');
-  console.log(`  ${command.name} ${usagePositionals} [options]  ${command.describe}`);
+  console.log(`  ${command.name} ${usagePositionals} [options]   ${command.describe}`);
+
+  // display any examples (when provided)
+  if (Array.isArray(command.examples) && command.examples.length) {
+    console.log('\nExamples:');
+    command.examples.forEach(ex => {
+      console.log(`  ${ex.cmd.replace('$0', command.name)}   ${ex.describe || ''}`);
+    });
+  }
 
   // calculate longest description length
   let longestOptNameLn = 0;
