@@ -113,17 +113,18 @@ const config: Config = {
       default: true,
     },
   },
-  version: readPackage(),
-  helpFlagCasing: 'camel', // show help flag option in which text casing (camel or kebab) (defaults to 'kebab')
-  helpDescMinLength: 40,  // min description length shown in help (defaults to 50)
-  helpDescMaxLength: 120, // max description length shown in help (defaults to 100), will show ellipsis (...) when greater
+  version: '0.1.6',
+  helpFlagCasing: 'camel',  // show help flag option in which casing (camel/kebab) (defaults to 'kebab')
+  helpDescMinLength: 40,    // min description length shown in help (defaults to 50)
+  helpDescMaxLength: 120,   // max description length shown in help (defaults to 100), will show ellipsis (...) when greater
 };
 
 const args = parseArgs(config);
 console.log(args);
 
-// do something with parse arguments, for example
-// startServer(args);
+// do something with parsed arguments, for example
+// const { input, port, open } = args;
+// startServer({ input, port, open });
 ```
 
 ### Usage with Type Inference
@@ -202,7 +203,7 @@ See [examples/](examples/) for more usage patterns.
 
 ## Help Example
 
-You can see below an example of a CLI help (which is the result of calling `--help` with the usage config shown above). 
+You can see below an example of a CLI help (which is the result of calling `--help` with the [config](#usage) shown above). 
 
 Please note:
 
