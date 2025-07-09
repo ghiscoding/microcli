@@ -41,6 +41,13 @@ const config: Config = {
   command: {
     name: 'serve',
     describe: 'Start a server with the given options',
+    examples: [
+      { cmd: '$0 ./www/index.html 8080 --open', describe: 'Start web server on port 8080 and open browser' },
+      {
+        cmd: '$0 ./index.html 8081 --no-open --verbose',
+        describe: 'Start web server on port 8081 without opening browser and print more debugging logging to the console',
+      },
+    ],
     positionals: {
       input: {
         describe: 'serving files or directory',
@@ -202,14 +209,18 @@ Please note:
 
 ```
 Usage:
-  serve <input..> [port] [options]  Start a server with the given options
+  serve <input..> [port] [options]   Start a server with the given options
+
+Examples:
+  serve ./www/index.html 8080 --open   Start web server on port 8080 and open browser
+  serve ./index.html 8081 --no-open --verbose   Start web server on port 8081 without opening browser and print more debugging logging to the console
 
 Arguments:
   input           serving files or directory                                      <string..>
   port            port to bind on                                                 [number]
 
 Options:
-  -d, --dryRun    Show what would be done, but do not actually start the server   [boolean]
+  -d, --dry-run   Show what would be done, but do not actually start the server   [boolean]
   -e, --exclude   pattern or glob to exclude (may be passed multiple times)       [array]
   -V, --verbose   print more information to console                               [boolean]
   -o, --open      open browser when starting server                               [boolean]

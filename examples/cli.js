@@ -6,6 +6,13 @@ const config = {
   command: {
     name: 'serve',
     describe: 'Start a server with the given options',
+    examples: [
+      { cmd: '$0 ./www/index.html 8080 --open', describe: 'Start web server on port 8080 and open browser' },
+      {
+        cmd: '$0 ./index.html 8081 --no-open --verbose',
+        describe: 'Start web server on port 8081 without opening browser and print more debugging logging to the console',
+      },
+    ],
     positionals: {
       input: {
         describe: 'serving files or directory',
