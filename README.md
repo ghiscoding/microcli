@@ -120,8 +120,9 @@ const config: Config = {
 const args = parseArgs(config);
 console.log(args);
 
-// do something with parse arguments, for example
-// startServer(args);
+// do something with parsed arguments, for example
+// const { input, port, open } = args;
+// startServer({ input, port, open });
 ```
 
 ### Usage with Type Inference
