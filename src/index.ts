@@ -202,7 +202,7 @@ export function parseArgs<C extends Config>(config: C): ArgsResult<C> {
 }
 
 /** Format a text to a fixed length, truncating and padding as needed. */
-function formatHelpText(text: string, max: number) {
+function formatHelpText(text = '', max = 500) {
   const truncated = text.length > max ? `${text.slice(0, max - 3)}...` : text;
   return truncated.padEnd(max);
 }
@@ -244,17 +244,17 @@ function findOption(options: Record<string, FlagOption>, arg: string): [FlagOpti
 
 /** Print CLI help documentation to the screen */
 function printHelp(config: Config) {
-  const { command, options, version, helpDescMinLength = 50, helpDescMaxLength = 100 } = config;
+  const { command, options, version, helpDescMinLength = 50, helpDescMaxLength = 100, helpUsageSeparator = '→' } = config;
   const usagePositionals = buildUsagePositionals(command.positionals);
 
   console.log('Usage:');
-  console.log(`  ${command.name} ${usagePositionals} [options]   ${command.describe}`);
+  console.log(`  ${command.name} ${usagePositionals} [options] ${helpUsageSeparator} ${command.describe}`);
 
   // display any examples (when provided)
   if (Array.isArray(command.examples) && command.examples.length) {
     console.log('\nExamples:');
     command.examples.forEach(ex => {
-      console.log(`  ${ex.cmd.replace('$0', command.name)}   ${ex.describe || ''}`);
+      console.log(`  ${ex.cmd.replace('$0', command.name)} ${helpUsageSeparator} ${ex.describe || ''}`);
     });
   }
 
