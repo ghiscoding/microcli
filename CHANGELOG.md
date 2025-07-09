@@ -1,6 +1,29 @@
 # Change Log
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.0](https://github.com/ghiscoding/cli-nano/compare/v1.1.3...v1.2.0) (2025-07-09)
+
+### ⚠ BREAKING CHANGES
+
+* change `positionals` from array to object
+* rename description to `describe` to match Yargs
+
+### Features
+
+* add `examples` option for the user to provide script examples ([ed39f82](https://github.com/ghiscoding/cli-nano/commit/ed39f82375d227e29843c595475fe1310006e477))
+* add `helpFlagCasing` to show flag in camel or kebab (default) case ([b5a8657](https://github.com/ghiscoding/cli-nano/commit/b5a8657e27271aa7d6069217232cdba726860233))
+* add command option `group` ([287d747](https://github.com/ghiscoding/cli-nano/commit/287d747ce8cd201efd1c384ed062f0ec44da4176))
+* change `positionals` from array to object ([d9c8799](https://github.com/ghiscoding/cli-nano/commit/d9c8799dbd49949349d473f6b9c5549578b8be7f))
+* rename description to `describe` to match Yargs ([99f5455](https://github.com/ghiscoding/cli-nano/commit/99f545500a2dc4adef09fa7481edd4b441c7d12b))
+
+### Bug Fixes
+
+* use same help desc/name width for all options & define min/max ln ([54f4333](https://github.com/ghiscoding/cli-nano/commit/54f4333275378bb3815152962fc4a87e9b8cc9a7))
+
+### Reverts
+
+* change positionals from array to object ([809b182](https://github.com/ghiscoding/cli-nano/commit/809b182931e7b17e356bd218bbf302acf22df0b1))
+
 ## [1.1.3](https://github.com/ghiscoding/cli-nano/compare/v1.1.2...v1.1.3) (2025-07-05)
 
 ### Bug Fixes
