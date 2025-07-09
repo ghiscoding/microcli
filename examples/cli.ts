@@ -93,6 +93,7 @@ const config = {
   // helpFlagCasing: 'camel', // show help flag option in which text casing (camel or kebab) (defaults to 'kebab')
   helpDescMinLength: 40, // min description length shown in help (defaults to 50)
   helpDescMaxLength: 120, // max description length shown in help (defaults to 100), will show ellipsis (...) when greater
+  // helpUsageSeparator: ':', // defaults to "→"
 } as const;
 
 const args = parseArgs<typeof config>(config);

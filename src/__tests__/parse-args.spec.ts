@@ -252,7 +252,7 @@ describe('parseArgs', () => {
         expect(error.message).toBe('process.exit unexpectedly called with "0"');
         expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Usage:'));
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('copyfiles <inFile> <outDirectory> [options]   Copy files from a source to a destination directory'),
+          expect.stringContaining('copyfiles <inFile> <outDirectory> [options] → Copy files from a source to a destination directory'),
         );
         expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('\nArguments:'));
         expect(consoleLogSpy).toHaveBeenCalledWith(
@@ -561,7 +561,7 @@ describe('parseArgs', () => {
         // The truncated string should end with '...'
         expect(consoleLogSpy).toHaveBeenCalledWith('\nExamples:');
         expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('  copyfiles ./www/index.html 8080 --open   Start web server on port 8080 and open browser'),
+          expect.stringContaining('  copyfiles ./www/index.html 8080 --open → Start web server on port 8080 and open browser'),
         );
         done();
       }

@@ -212,11 +212,11 @@ Please note:
 
 ```
 Usage:
-  serve <input..> [port] [options]   Start a server with the given options
+  serve <input..> [port] [options] → Start a server with the given options
 
 Examples:
-  serve ./www/index.html 8080 --open   Start web server on port 8080 and open browser
-  serve ./index.html 8081 --no-open --verbose   Start web server on port 8081 without opening browser and print more debugging logging to the console
+  serve ./www/index.html 8080 --open → Start web server on port 8080 and open browser
+  serve ./index.html 8081 --no-open --verbose → Start web server on port 8081 without opening browser and print more debugging logging to the console
 
 Arguments:
   input           serving files or directory                                      <string..>

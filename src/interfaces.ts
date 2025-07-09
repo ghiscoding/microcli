@@ -74,6 +74,9 @@ export interface Config {
   /** min description length shown in the help (defaults to 50) */
   helpDescMinLength?: number;
 
+  /** text separator between usage/examples & descriptions (defaults to "→") */
+  helpUsageSeparator?: string;
+
   /** max description length shown in the help (defaults to 100) */
   helpDescMaxLength?: number;
 
