@@ -1,4 +1,4 @@
-import type { ArgsResult, Config, FlagOption, PositionalArgument } from './interfaces.js';
+import type { ArgsResult, Config, FlagOption } from './interfaces.js';
 
 export type * from './interfaces.js';
 
@@ -42,14 +42,14 @@ export function parseArgs<C extends Config>(config: C): ArgsResult<C> {
   }
 
   // Validate: required positionals must come before optional ones
-  const positionals = Object.entries(command.positionals ?? {});
+  const positionals = command.positionals ?? [];
   let foundOptional = false;
-  for (const [key, pos] of positionals) {
+  for (const pos of positionals) {
     if (!pos.required) {
       foundOptional = true;
     }
     if (foundOptional && pos.required) {
-      throw new Error(`Invalid positional argument configuration: required positional "${key}" cannot follow optional positional(s).`);
+      throw new Error(`Invalid positional argument configuration: required positional "${pos.name}" cannot follow optional positional(s).`);
     }
   }
 
@@ -63,28 +63,28 @@ export function parseArgs<C extends Config>(config: C): ArgsResult<C> {
 
   let nonOptionIndex = 0;
   for (let i = 0; i < positionals.length; i++) {
-    const [key, pos] = positionals[i];
+    const pos = positionals[i];
     if (pos.variadic) {
       const remaining = positionals.length - (i + 1);
       const values = nonOptionArgs.slice(nonOptionIndex, nonOptionArgs.length - remaining);
       if (pos.required && values.length === 0) {
-        const usagePositionals = buildUsagePositionals(command.positionals);
+        const usagePositionals = buildUsagePositionals(positionals);
         throw new Error(`Missing required positional argument, i.e.: "${command.name} ${usagePositionals}"`);
       }
-      result[key] = !pos.required && values.length === 0 && pos.default !== undefined ? pos.default : values;
+      result[pos.name] = !pos.required && values.length === 0 && pos.default !== undefined ? pos.default : values;
       nonOptionIndex += values.length;
     } else {
       const value = nonOptionArgs[nonOptionIndex];
       // Check if there are enough args left for required positionals
-      const requiredLeft = positionals.slice(i).filter(([_, p]) => p.required).length;
+      const requiredLeft = positionals.slice(i).filter(p => p.required).length;
       const argsLeft = nonOptionArgs.length - nonOptionIndex;
       if (value !== undefined && (argsLeft > requiredLeft - (pos.required ? 1 : 0) || pos.required)) {
-        result[key] = value;
+        result[pos.name] = value;
         nonOptionIndex++;
       } else if (!pos.required && pos.default !== undefined) {
-        result[key] = pos.default;
+        result[pos.name] = pos.default;
       } else if (pos.required) {
-        const usagePositionals = buildUsagePositionals(command.positionals);
+        const usagePositionals = buildUsagePositionals(positionals);
         throw new Error(`Missing required positional argument, i.e.: "${command.name} ${usagePositionals}"`);
       }
     }
@@ -96,7 +96,7 @@ export function parseArgs<C extends Config>(config: C): ArgsResult<C> {
   // Mark all nonOptionArgs indices as consumed for positionals
   let tempNonOptionIndex = 0;
   for (let i = 0; i < positionals.length; i++) {
-    const [_, pos] = positionals[i];
+    const pos = positionals[i];
     if (pos.variadic) {
       const remaining = positionals.length - (i + 1);
       const values = nonOptionArgs.slice(tempNonOptionIndex, nonOptionArgs.length - remaining);
@@ -208,11 +208,11 @@ function formatHelpText(text: string, max: number) {
 }
 
 /** Build the usage string for positionals, e.g. "<input..> [output]" */
-function buildUsagePositionals(positionals: Record<string, PositionalArgument> = {}) {
-  return Object.entries(positionals)
-    .map(([key, p]) => {
+function buildUsagePositionals(positionals: readonly any[] = []) {
+  return positionals
+    .map(p => {
       const variadic = p.variadic ? '..' : '';
-      return p.required ? `<${key}${variadic}>` : `[${key}${variadic}]`;
+      return p.required ? `<${p.name}${variadic}>` : `[${p.name}${variadic}]`;
     })
     .join(' ');
 }
@@ -283,9 +283,9 @@ function printHelp(config: Config) {
   longestOptNameLn += 3;
 
   console.log('\nArguments:');
-  Object.entries(command.positionals ?? {}).forEach(([key, arg]) => {
+  command.positionals?.forEach(arg => {
     console.log(
-      `  ${formatHelpText(key, longestOptNameLn + 6)}${formatHelpText(arg.describe, longestOptDescLn)} ${formatOptionType(arg.type, arg.variadic, arg.required)}`,
+      `  ${formatHelpText(arg.name, longestOptNameLn + 6)}${formatHelpText(arg.describe, longestOptDescLn)} ${formatOptionType(arg.type, arg.variadic, arg.required)}`,
     );
   });
 
