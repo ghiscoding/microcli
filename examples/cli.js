@@ -13,20 +13,22 @@ const config = {
         describe: 'Start web server on port 8081 without opening browser and print more debugging logging to the console',
       },
     ],
-    positionals: {
-      input: {
+    positionals: [
+      {
+        name: 'input',
         describe: 'serving files or directory',
         type: 'string',
         variadic: true, // 1 or more
         required: true,
       },
-      port: {
+      {
+        name: 'port',
         type: 'number',
         describe: 'port to bind on',
         required: false,
         default: 5000, // optional default value
       },
-    },
+    ],
   },
   options: {
     dryRun: {
@@ -77,8 +79,9 @@ const config = {
     },
   },
   version: '0.1.6',
-  // helpFlagCasing: 'camel',
-  maxDescLength: 125, // max description length shown in help
+  // helpFlagCasing: 'camel', // show help flag option in which text casing (camel or kebab) (defaults to 'kebab')
+  helpDescMinLength: 40, // min description length shown in help (defaults to 50)
+  helpDescMaxLength: 120, // max description length shown in help (defaults to 100), will show ellipsis (...) when greater
 };
 
 const results = parseArgs(config);

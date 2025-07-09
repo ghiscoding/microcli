@@ -48,20 +48,22 @@ const config: Config = {
         describe: 'Start web server on port 8081 without opening browser and print more debugging logging to the console',
       },
     ],
-    positionals: {
-      input: {
+    positionals: [
+      {
+        name: 'input',
         describe: 'serving files or directory',
         type: 'string',
         variadic: true, // 1 or more
         required: true,
       },
-      port: {
+      {
+        name: 'port',
         type: 'number',
         describe: 'port to bind on',
         required: false,
         default: 5000, // optional default value
       },
-    },
+    ],
   },
   options: {
     dryRun: {

@@ -19,6 +19,9 @@ export interface FlagOption {
 }
 
 export interface PositionalArgument {
+  /** positional argument name (it will be displayed in the help docs) */
+  name: string;
+
   /** describe positional argument */
   describe: string;
 
@@ -46,7 +49,7 @@ export interface CommandOption {
   examples?: readonly ExampleOption[];
 
   /** list of positional arguments */
-  positionals?: Record<string, PositionalArgument>;
+  positionals?: readonly PositionalArgument[];
 }
 
 export interface ExampleOption {
@@ -122,13 +125,12 @@ export type OptionsToObject<T extends Record<string, any>> = { [K in RequiredKey
 };
 
 /** Map positionals array to an object type with required/optional properties */
-export type PositionalsToObject<T extends Record<string, PositionalArgument> | undefined> = T extends Record<string, infer P>
+export type PositionalsToObject<T extends readonly PositionalArgument[] | undefined> = T extends readonly [infer P, ...infer Rest]
   ? P extends PositionalArgument
-    ? P['required'] extends true
-      ? { [K in keyof T]: ArgValueType<P> }
-      : { [K in keyof T]?: ArgValueType<P> }
-    : Record<string, never>
-  : Record<string, never>;
+    ? (P['required'] extends true ? { [K in P['name']]: ArgValueType<P> } : { [K in P['name']]?: ArgValueType<P> }) &
+        PositionalsToObject<Rest extends readonly PositionalArgument[] ? Rest : []>
+    : PositionalsToObject<Rest extends readonly PositionalArgument[] ? Rest : []>
+  : { [key: string]: never };
 
 /** The full result type for parseArgs */
 export type ArgsResult<C extends Config> = PositionalsToObject<C['command']['positionals']> & OptionsToObject<C['options']>;
